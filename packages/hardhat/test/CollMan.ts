@@ -4,6 +4,7 @@ import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import hre from "hardhat";
 
 describe("CollMan", function () {
+    
     async function deployFixture() {
         const [owner, celo_user, usdt_user] = await ethers.getSigners();
         const MockUSDT = await hre.ethers.getContractFactory("MockUSDT");
@@ -15,6 +16,7 @@ describe("CollMan", function () {
 
         return { owner, celo_user, usdt_user, mockUSDT, coll };
     }
+
 
     it("Approve Collateral Manager to spend USDT", async function () {
         const { owner, celo_user, usdt_user, mockUSDT, coll } = await loadFixture(deployFixture);
