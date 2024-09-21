@@ -2,15 +2,21 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./CollateralManager.sol";
 import "./PriceFeedOracles.sol"; 
 
-contract LoanManager is ReentrancyGuard {
 
-    IERC20 public cUSDToken; // Token used to finance the loan
+
+contract LoanManager is ReentrancyGuard, Ownable {
+
+
+    ERC20 public cUSDToken; // Token used to finance the loan
     CollateralManager public collateralManager; // Contract that keeps track of user collateral
     MellowFiPriceOracle public priceOracle; // Price Oracle contract instance
+    uint256 public fundPool; // Total funds available for loans
 
     uint256 public collateralToLoanRatio = 150; // 150% collateral requirement (i.e. 1.5x collateral for loan)
     uint256 public loanDuration = 30 days;
@@ -31,7 +37,7 @@ contract LoanManager is ReentrancyGuard {
     event LoanRepaid(address indexed user, uint256 amount, uint256 collateralReturned);
     event LoanDefaulted(address indexed user, uint256 collateralLiquidated);
 
-    constructor(IERC20 _cUSDToken, address _collateralManager, address _priceOracle) {
+    constructor(ERC20 _cUSDToken, address _collateralManager, address _priceOracle) Ownable(msg.sender) {
         cUSDToken = _cUSDToken;
         collateralManager = CollateralManager(_collateralManager);
         priceOracle = MellowFiPriceOracle(_priceOracle); 
@@ -65,6 +71,12 @@ contract LoanManager is ReentrancyGuard {
         require(cUSDToken.transfer(msg.sender, _loanAmount), "LoanManager: Loan transfer failed");
 
         emit LoanIssued(msg.sender, _loanAmount, userTotalCol);
+    }
+
+    // Get possible loan amount based on collateral
+    function getMaxLoanAmount() external view returns (uint256) {
+        uint256 userTotalCol = collateralManager.getCollateralBalanceinUSD(msg.sender);
+        return userTotalCol * 100 / collateralToLoanRatio;
     }
 
     // Repay the loan and recover collateral
@@ -119,4 +131,11 @@ contract LoanManager is ReentrancyGuard {
         require(_newDuration > 0, "LoanManager: Invalid duration");
         defaultDuration = _newDuration;
     }
+
+    function addFundToPool(uint256 _amount) external onlyOwner {
+        require(cUSDToken.transferFrom(msg.sender, address(this), _amount), "LoanManager: Fund transfer failed");
+        fundPool += _amount;
+    }
+
+    
 }
