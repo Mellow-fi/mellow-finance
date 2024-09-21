@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -13,12 +13,12 @@ import "./PriceFeedOracles.sol";
 
 contract CollateralManager is ReentrancyGuard, Pausable, Ownable {
 
-    ERC20 public usdtToken;
+    IERC20 public usdtToken;
     MellowFiPriceOracle public priceOracle;
     uint256 public totalCollateralCelo;
     uint256 public totalCollateralUsdt;
     uint256 public minCollateralAmount = 1 ether; 
-    uint256 public maxCollateralAmount = 10 ether; 
+    uint256 public maxCollateralAmount = 1000 ether; 
 
     // Mapping for user's collateral balance in Celo and USDT
     mapping(address => uint256) public userCollateralCelo;
@@ -29,7 +29,7 @@ contract CollateralManager is ReentrancyGuard, Pausable, Ownable {
     event UsdtCollateralDeposited(address indexed user, uint256 amount);
     event UsdtCollateralWithdrawn(address indexed user, uint256 amount);
 
-    constructor(ERC20 _collateralToken,
+    constructor(IERC20 _collateralToken,
     address _priceOracleAddress) Ownable(msg.sender){
         usdtToken = _collateralToken;
         priceOracle = MellowFiPriceOracle(_priceOracleAddress);

@@ -11,12 +11,14 @@ export default function Home() {
     mintValoraNFT,
     getNFTs,
     signTransaction,
+    depositCelloCollateral,
   } = useWeb3();
   const [cUSDLoading, setCUSDLoading] = useState(false);
   const [nftLoading, setNFTLoading] = useState(false);
   const [signingLoading, setSigningLoading] = useState(false);
   const [userOwnedNFTs, setUserOwnedNFTs] = useState<string[]>([]);
   const [tx, setTx] = useState<any>(undefined);
+  const [depositLoading, setDepositLoading] = useState(false); 
 
   useEffect(() => {
     getUserAddress().then(async () => {
@@ -71,8 +73,22 @@ export default function Home() {
               widthFull
             />
           </div>
+          {/* Deposit Collateral Button */}
+          <div className="w-full px-3 mt-6">
+            <PrimaryButton
+              loading={depositLoading}  // Track loading state
+              onClick={async () => {
+                setDepositLoading(true);
+                const tx = await depositCelloCollateral("1");  // Deposit 1 unit of collateral (adjust as needed)
+                setTx(tx);
+                setDepositLoading(false);
+              }}
+              title="Deposit 1 CELO as Collateral"
+              widthFull
+            />
+          </div>
 
-          {userOwnedNFTs.length > 0 ? (
+          {/* {userOwnedNFTs.length > 0 ? (
             <div className="flex flex-col items-center justify-center w-full mt-7">
               <p className="font-bold">My NFTs</p>
               <div className="w-full grid grid-cols-2 gap-3 mt-3 px-2">
@@ -94,8 +110,8 @@ export default function Home() {
             </div>
           ) : (
             <div className="mt-5">You do not have any NFTs yet</div>
-          )}
-
+          )} */}
+{/* 
           <div className="w-full px-3 mt-5">
             <PrimaryButton
               loading={nftLoading}
@@ -110,7 +126,7 @@ export default function Home() {
               title="Mint Valora NFT"
               widthFull
             />
-          </div>
+          </div> */}
         </>
       )}
     </div>

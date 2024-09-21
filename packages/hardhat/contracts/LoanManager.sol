@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./CollateralManager.sol";
@@ -13,7 +13,7 @@ import "./PriceFeedOracles.sol";
 contract LoanManager is ReentrancyGuard, Ownable {
 
 
-    ERC20 public cUSDToken; // Token used to finance the loan
+    IERC20 public cUSDToken; // Token used to finance the loan
     CollateralManager public collateralManager; // Contract that keeps track of user collateral
     MellowFiPriceOracle public priceOracle; // Price Oracle contract instance
     uint256 public fundPool; // Total funds available for loans
@@ -37,7 +37,7 @@ contract LoanManager is ReentrancyGuard, Ownable {
     event LoanRepaid(address indexed user, uint256 amount, uint256 collateralReturned);
     event LoanDefaulted(address indexed user, uint256 collateralLiquidated);
 
-    constructor(ERC20 _cUSDToken, address _collateralManager, address _priceOracle) Ownable(msg.sender) {
+    constructor(IERC20 _cUSDToken, address _collateralManager, address _priceOracle) Ownable(msg.sender) {
         cUSDToken = _cUSDToken;
         collateralManager = CollateralManager(_collateralManager);
         priceOracle = MellowFiPriceOracle(_priceOracle); 
