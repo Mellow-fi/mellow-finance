@@ -19,7 +19,7 @@ async function main() {
 
     // Deploy LoanManager
   const LoanManager = await hre.ethers.getContractFactory("LoanManager");
-  const loanManager = await LoanManager.deploy("0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f", coll.target);
+  const loanManager = await LoanManager.deploy("0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f", coll.target, "");
   await loanManager.waitForDeployment();
   const loanManagerAddress = await loanManager.getAddress();
   console.log(`LoanManager deployed to: ${loanManagerAddress}`);

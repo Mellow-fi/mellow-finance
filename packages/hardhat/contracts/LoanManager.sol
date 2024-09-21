@@ -4,11 +4,13 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./CollateralManager.sol";
+import "./PriceFeedOracles.sol"; 
 
 contract LoanManager is ReentrancyGuard {
 
     IERC20 public cUSDToken; // Token used to finance the loan
     CollateralManager public collateralManager; // Contract that keeps track of user collateral
+    MellowFiPriceOracle public priceOracle; // Price Oracle contract instance
 
     uint256 public collateralToLoanRatio = 150; // 150% collateral requirement (i.e. 1.5x collateral for loan)
     uint256 public loanDuration = 30 days;
@@ -29,9 +31,10 @@ contract LoanManager is ReentrancyGuard {
     event LoanRepaid(address indexed user, uint256 amount, uint256 collateralReturned);
     event LoanDefaulted(address indexed user, uint256 collateralLiquidated);
 
-    constructor(IERC20 _cUSDToken, address _collateralManager) {
+    constructor(IERC20 _cUSDToken, address _collateralManager, address _priceOracle) {
         cUSDToken = _cUSDToken;
         collateralManager = CollateralManager(_collateralManager);
+        priceOracle = MellowFiPriceOracle(_priceOracle); 
     }
 
     // Request a loan based on the user's collateral
@@ -40,20 +43,19 @@ contract LoanManager is ReentrancyGuard {
         require(userLoans[msg.sender].amount == 0, "LoanManager: Existing loan must be repaid first");
 
         // Ensure user has enough collateral
-        (uint256 celoCollateral, uint256 usdtCollateral) = collateralManager.getCollateralBalance(msg.sender);
-        uint256 totalCollateral = celoCollateral + usdtCollateral;
-        require(totalCollateral > 0, "LoanManager: No collateral available");
+        uint256 userTotalCol = collateralManager.getCollateralBalanceinUSD(msg.sender);
+        require(userTotalCol > 0, "LoanManager: No collateral available");
 
-        // Calculate maximum loan based on collateral-to-loan ratio
-        uint256 maxLoanAmount = totalCollateral * 100 / collateralToLoanRatio;
+        // Calculate maximum loan amount based on collateral-to-loan ratio
+        uint256 maxLoanAmount = userTotalCol * 100 / collateralToLoanRatio;
         require(_loanAmount <= maxLoanAmount, "LoanManager: Insufficient collateral for requested loan amount");
 
         // Store loan information
         Loan memory newLoan = Loan({
             amount: _loanAmount,
-            interestRate: 5, // 5% simple interest rate for this example
+            interestRate: 5, // hardcoded interest for now
             startTime: block.timestamp,
-            collateral: totalCollateral,
+            collateral: userTotalCol,
             isRepaid: false,
             isDefaulted: false
         });
@@ -62,7 +64,7 @@ contract LoanManager is ReentrancyGuard {
         // Transfer cUSD to user
         require(cUSDToken.transfer(msg.sender, _loanAmount), "LoanManager: Loan transfer failed");
 
-        emit LoanIssued(msg.sender, _loanAmount, totalCollateral);
+        emit LoanIssued(msg.sender, _loanAmount, userTotalCol);
     }
 
     // Repay the loan and recover collateral
@@ -82,7 +84,7 @@ contract LoanManager is ReentrancyGuard {
         loan.isRepaid = true;
 
         // Return collateral to the user
-        collateralManager.withdrawCeloCollateral(loan.collateral);
+        collateralManager.releaseFunds(msg.sender);
         emit LoanRepaid(msg.sender, loan.amount, loan.collateral);
     }
 

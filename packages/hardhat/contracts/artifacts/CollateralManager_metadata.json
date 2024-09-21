@@ -11,6 +11,11 @@
 						"internalType": "contract IERC20",
 						"name": "_collateralToken",
 						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_priceOracleAddress",
+						"type": "address"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -219,6 +224,51 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_user",
+						"type": "address"
+					}
+				],
+				"name": "getCollateralBalanceinUSD",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "maxCollateralAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "minCollateralAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "owner",
 				"outputs": [
@@ -253,9 +303,61 @@
 			},
 			{
 				"inputs": [],
+				"name": "priceOracle",
+				"outputs": [
+					{
+						"internalType": "contract MellowFiPriceOracle",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"name": "releaseFunds",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "renounceOwnership",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalCollateralCelo",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalCollateralUsdt",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -431,6 +533,14 @@
 		"remappings": []
 	},
 	"sources": {
+		"@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol": {
+			"keccak256": "0x257a8d28fa83d3d942547c8e129ef465e4b5f3f31171e7be4739a4c98da6b4f0",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6d39e11b1dc7b9b8ccdabbc9be442ab7cda4a81c748f57e316dcb1bcb4a28bf9",
+				"dweb:/ipfs/QmaG6vz6W6iEUBsbHSBob5mdcitYxWjoygxREHpsJHfWrS"
+			]
+		},
 		"@openzeppelin/contracts/access/Ownable.sol": {
 			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
 			"license": "MIT",
@@ -472,11 +582,19 @@
 			]
 		},
 		"contracts/CollateralManager.sol": {
-			"keccak256": "0x632bce27c378ee460b62a321aa754558b1ad4f1e4a1374dcb543fd22304b0a3b",
+			"keccak256": "0x829bf3548568eda32ad43ed41fdb9646cd40b217dbc2a4050bb3e3f273e246ed",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5e68f12f9d4ae522a2ad4935c2882fd365e153e368d50eaad0816b5048c8b6dc",
-				"dweb:/ipfs/QmQ9jMPA3zKqS4K6XsQsEHv4afKpdgrxSMCrAjdYrRqEb7"
+				"bzz-raw://7bafacafc62f7af6559d7cc4661008ab93de7245028b3b525ebbc9a4d8cd1882",
+				"dweb:/ipfs/Qmf3RoCCU83gGgePVZcNbHZLGMjBZwVvRAyiqVkgtGcx8Y"
+			]
+		},
+		"contracts/PriceFeedOracles.sol": {
+			"keccak256": "0x39891b5c809b48e0a4db87101ca5ad0642a2b44cc3128bdc3353941884a645db",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://658dd9a84f6a100735838482f08ba261679f6cb43aa2f2a7ff1455abe8d52ab0",
+				"dweb:/ipfs/QmavDQ4L8qgGRgd8coNzud4aS8Uc2FQxKaLqZBg8DjqW7H"
 			]
 		}
 	},

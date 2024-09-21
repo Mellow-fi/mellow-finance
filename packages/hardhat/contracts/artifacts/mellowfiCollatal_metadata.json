@@ -422,7 +422,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/MockUSDT.sol": "mellowfiCollatal"
+			"contracts/MellowFiPToken.sol": "mellowfiCollatal"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -476,7 +476,7 @@
 				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
 			]
 		},
-		"contracts/MockUSDT.sol": {
+		"contracts/MellowFiPToken.sol": {
 			"keccak256": "0xc7db3b66288e7f0ab7f104f419ce3d61b9f3bb0f80cd285e47263578a1e12269",
 			"license": "MIT",
 			"urls": [
