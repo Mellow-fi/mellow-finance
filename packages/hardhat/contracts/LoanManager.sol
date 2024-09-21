@@ -43,6 +43,12 @@ contract LoanManager is ReentrancyGuard, Ownable {
         priceOracle = MellowFiPriceOracle(_priceOracle); 
     }
 
+    // Get amount user can loan
+    function getLoanAmount(address _user) external view returns (uint256) {
+        uint256 userTotalCol = collateralManager.getCollateralBalanceinUSD(_user);
+        return userTotalCol * 100 / collateralToLoanRatio;
+    }
+
     // Request a loan based on the user's collateral
     function requestLoan(uint256 _loanAmount) external nonReentrant {
         require(_loanAmount > 0, "LoanManager: Loan amount must be greater than 0");
@@ -67,14 +73,16 @@ contract LoanManager is ReentrancyGuard, Ownable {
         });
         userLoans[msg.sender] = newLoan;
 
-        // Transfer cUSD to user
+        // Transfer cUSD to user from the contract
         require(cUSDToken.transfer(msg.sender, _loanAmount), "LoanManager: Loan transfer failed");
+        
 
         emit LoanIssued(msg.sender, _loanAmount, userTotalCol);
     }
 
     // Get possible loan amount based on collateral
     function getMaxLoanAmount() external view returns (uint256) {
+        // Check that the user has collateral. If not revert the transaction properly
         uint256 userTotalCol = collateralManager.getCollateralBalanceinUSD(msg.sender);
         return userTotalCol * 100 / collateralToLoanRatio;
     }
@@ -111,28 +119,28 @@ contract LoanManager is ReentrancyGuard, Ownable {
         loan.isDefaulted = true;
 
         // Liquidate collateral
-        collateralManager.withdrawCeloCollateral(loan.collateral); // Liquidate collateral (in this example, withdraw to contract)
+        collateralManager.withdrawCeloCollateral(loan.collateral); // Liquidate collateral 
 
         emit LoanDefaulted(_user, loan.collateral);
     }
 
-    // Admin functions to update collateralToLoanRatio or loanDuration if needed
-    function updateCollateralToLoanRatio(uint256 _newRatio) external {
+    // Admin functions to update collateralToLoanRatio or loanDuration 
+    function updateCollateralToLoanRatio(uint256 _newRatio) external onlyOwner {
         require(_newRatio >= 100, "LoanManager: Invalid ratio");
         collateralToLoanRatio = _newRatio;
     }
 
-    function updateLoanDuration(uint256 _newDuration) external {
+    function updateLoanDuration(uint256 _newDuration) external onlyOwner{
         require(_newDuration > 0, "LoanManager: Invalid duration");
         loanDuration = _newDuration;
     }
 
-    function updateDefaultDuration(uint256 _newDuration) external {
+    function updateDefaultDuration(uint256 _newDuration) external onlyOwner{
         require(_newDuration > 0, "LoanManager: Invalid duration");
         defaultDuration = _newDuration;
     }
 
-    function addFundToPool(uint256 _amount) external onlyOwner {
+    function addFundToPool(uint256 _amount) external onlyOwner onlyOwner{
         require(cUSDToken.transferFrom(msg.sender, address(this), _amount), "LoanManager: Fund transfer failed");
         fundPool += _amount;
     }

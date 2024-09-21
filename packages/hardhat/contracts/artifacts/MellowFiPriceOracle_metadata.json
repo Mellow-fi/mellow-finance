@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.26+commit.8a97fa7a"
+		"version": "0.8.20+commit.a1b79de6"
 	},
 	"language": "Solidity",
 	"output": {
@@ -63,7 +63,7 @@
 		"compilationTarget": {
 			"contracts/PriceFeedOracles.sol": "MellowFiPriceOracle"
 		},
-		"evmVersion": "cancun",
+		"evmVersion": "shanghai",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -84,11 +84,11 @@
 			]
 		},
 		"contracts/PriceFeedOracles.sol": {
-			"keccak256": "0x39891b5c809b48e0a4db87101ca5ad0642a2b44cc3128bdc3353941884a645db",
+			"keccak256": "0xdfc3a74dea9ba83a079dbf496b29e987af21a620b8f8f8f35f4fc71c1e071a46",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://658dd9a84f6a100735838482f08ba261679f6cb43aa2f2a7ff1455abe8d52ab0",
-				"dweb:/ipfs/QmavDQ4L8qgGRgd8coNzud4aS8Uc2FQxKaLqZBg8DjqW7H"
+				"bzz-raw://ebc838af0a104d73682ab10df2e8398bde05d2de05a73747c1d2e4ac41caca84",
+				"dweb:/ipfs/Qmd7hLknM3tyyFBXmVEkCcSyapKdBr9qqywbArP6heVGGD"
 			]
 		}
 	},

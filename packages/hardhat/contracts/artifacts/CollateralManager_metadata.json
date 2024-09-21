@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.26+commit.8a97fa7a"
+		"version": "0.8.20+commit.a1b79de6"
 	},
 	"language": "Solidity",
 	"output": {
@@ -8,7 +8,7 @@
 			{
 				"inputs": [
 					{
-						"internalType": "contract IERC20",
+						"internalType": "contract ERC20",
 						"name": "_collateralToken",
 						"type": "address"
 					},
@@ -385,7 +385,7 @@
 				"name": "usdtToken",
 				"outputs": [
 					{
-						"internalType": "contract IERC20",
+						"internalType": "contract ERC20",
 						"name": "",
 						"type": "address"
 					}
@@ -521,7 +521,7 @@
 		"compilationTarget": {
 			"contracts/CollateralManager.sol": "CollateralManager"
 		},
-		"evmVersion": "cancun",
+		"evmVersion": "shanghai",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -549,12 +549,36 @@
 				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
 			]
 		},
+		"@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
+			"keccak256": "0x60c65f701957fdd6faea1acb0bb45825791d473693ed9ecb34726fdfaa849dd7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ea290300e0efc4d901244949dc4d877fd46e6c5e43dc2b26620e8efab3ab803f",
+				"dweb:/ipfs/QmcLLJppxKeJWqHxE2CUkcfhuRTgHSn8J4kijcLa5MYhSt"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/ERC20.sol": {
+			"keccak256": "0xc3e1fa9d1987f8d349dfb4d6fe93bf2ca014b52ba335cfac30bfe71e357e6f80",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c5703ccdeb7b1d685e375ed719117e9edf2ab4bc544f24f23b0d50ec82257229",
+				"dweb:/ipfs/QmTdwkbQq7owpCiyuzE7eh5LrD2ddrBCZ5WHVsWPi1RrTS"
+			]
+		},
 		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
 			"keccak256": "0xc6a8ff0ea489379b61faa647490411b80102578440ab9d84e9a957cc12164e70",
 			"license": "MIT",
 			"urls": [
 				"bzz-raw://0ea104e577e63faea3b69c415637e99e755dcbf64c5833d7140c35a714d6d90c",
 				"dweb:/ipfs/Qmau6x4Ns9XdyynRCNNp3RhLqijJjFm7z5fyZazfYFGYdq"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+			"keccak256": "0xaa761817f6cd7892fcf158b3c776b34551cde36f48ff9703d53898bc45a94ea2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0ad7c8d4d08938c8dfc43d75a148863fb324b80cf53e0a36f7e5a4ac29008850",
+				"dweb:/ipfs/QmcrhfPgVNf5mkdhQvy1pMv51TFokD3Y4Wa5WZhFqVh8UV"
 			]
 		},
 		"@openzeppelin/contracts/utils/Context.sol": {
@@ -582,19 +606,19 @@
 			]
 		},
 		"contracts/CollateralManager.sol": {
-			"keccak256": "0x829bf3548568eda32ad43ed41fdb9646cd40b217dbc2a4050bb3e3f273e246ed",
+			"keccak256": "0x952bd33228421a3a1661aad291ad1ae1396c5e2900bbbdd2d8c409a8bdc0b3e4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7bafacafc62f7af6559d7cc4661008ab93de7245028b3b525ebbc9a4d8cd1882",
-				"dweb:/ipfs/Qmf3RoCCU83gGgePVZcNbHZLGMjBZwVvRAyiqVkgtGcx8Y"
+				"bzz-raw://2ac587dd2c76512727c02208c1d9c70b0e8577232d6fab9d97028733cfe4e20b",
+				"dweb:/ipfs/QmaBYn4uyEWYRGDSyzD4RuZGcHLBRGEDcwuoD9VmT4jXLf"
 			]
 		},
 		"contracts/PriceFeedOracles.sol": {
-			"keccak256": "0x39891b5c809b48e0a4db87101ca5ad0642a2b44cc3128bdc3353941884a645db",
+			"keccak256": "0xdfc3a74dea9ba83a079dbf496b29e987af21a620b8f8f8f35f4fc71c1e071a46",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://658dd9a84f6a100735838482f08ba261679f6cb43aa2f2a7ff1455abe8d52ab0",
-				"dweb:/ipfs/QmavDQ4L8qgGRgd8coNzud4aS8Uc2FQxKaLqZBg8DjqW7H"
+				"bzz-raw://ebc838af0a104d73682ab10df2e8398bde05d2de05a73747c1d2e4ac41caca84",
+				"dweb:/ipfs/Qmd7hLknM3tyyFBXmVEkCcSyapKdBr9qqywbArP6heVGGD"
 			]
 		}
 	},

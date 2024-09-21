@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.26+commit.8a97fa7a"
+		"version": "0.8.20+commit.a1b79de6"
 	},
 	"language": "Solidity",
 	"output": {
@@ -422,9 +422,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/MellowFiPToken.sol": "mellowfiCollatal"
+			"contracts/MellowFiCToken.sol": "mellowfiCollatal"
 		},
-		"evmVersion": "cancun",
+		"evmVersion": "shanghai",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -476,12 +476,12 @@
 				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
 			]
 		},
-		"contracts/MellowFiPToken.sol": {
-			"keccak256": "0xc7db3b66288e7f0ab7f104f419ce3d61b9f3bb0f80cd285e47263578a1e12269",
+		"contracts/MellowFiCToken.sol": {
+			"keccak256": "0x5e88accddbf8c3bf466688696411e925d9c0211fbf60c13ffbc2fb8858969e3b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://974a15b856e23b9f2e56ee25ae954028ac70e4314e56086812fd88e4de4a7b7a",
-				"dweb:/ipfs/QmeHcpeSHww9TXKjKnA5C13BXxMLkzJQZ5dXXqsBKeqqaq"
+				"bzz-raw://be4030c81b77abf39f0e925e8d71cdd53dc7b7bfeb25b1207e3b98415d863073",
+				"dweb:/ipfs/QmcCyDRzyXU838omVmjVcSkaAGBHMnPe1RF7eaQ7JaSVAQ"
 			]
 		}
 	},

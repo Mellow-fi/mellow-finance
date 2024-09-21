@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.26+commit.8a97fa7a"
+		"version": "0.8.20+commit.a1b79de6"
 	},
 	"language": "Solidity",
 	"output": {
@@ -8,7 +8,7 @@
 			{
 				"inputs": [
 					{
-						"internalType": "contract IERC20",
+						"internalType": "contract ERC20",
 						"name": "_cUSDToken",
 						"type": "address"
 					},
@@ -16,10 +16,37 @@
 						"internalType": "address",
 						"name": "_collateralManager",
 						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_priceOracle",
+						"type": "address"
 					}
 				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "OwnableInvalidOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "OwnableUnauthorizedAccount",
+				"type": "error"
 			},
 			{
 				"inputs": [],
@@ -96,11 +123,43 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "addFundToPool",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "cUSDToken",
 				"outputs": [
 					{
-						"internalType": "contract IERC20",
+						"internalType": "contract ERC20",
 						"name": "",
 						"type": "address"
 					}
@@ -162,6 +221,32 @@
 			},
 			{
 				"inputs": [],
+				"name": "fundPool",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getMaxLoanAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "loanDuration",
 				"outputs": [
 					{
@@ -171,6 +256,39 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "priceOracle",
+				"outputs": [
+					{
+						"internalType": "contract MellowFiPriceOracle",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -195,6 +313,19 @@
 					}
 				],
 				"name": "requestLoan",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -285,6 +416,16 @@
 		],
 		"devdoc": {
 			"errors": {
+				"OwnableInvalidOwner(address)": [
+					{
+						"details": "The owner is not a valid owner account. (eg. `address(0)`)"
+					}
+				],
+				"OwnableUnauthorizedAccount(address)": [
+					{
+						"details": "The caller account is not authorized to perform an operation."
+					}
+				],
 				"ReentrancyGuardReentrantCall()": [
 					{
 						"details": "Unauthorized reentrant call."
@@ -292,7 +433,17 @@
 				]
 			},
 			"kind": "dev",
-			"methods": {},
+			"methods": {
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+				},
+				"transferOwnership(address)": {
+					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				}
+			},
 			"version": 1
 		},
 		"userdoc": {
@@ -305,7 +456,7 @@
 		"compilationTarget": {
 			"contracts/LoanManager.sol": "LoanManager"
 		},
-		"evmVersion": "cancun",
+		"evmVersion": "shanghai",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -333,12 +484,36 @@
 				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
 			]
 		},
+		"@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
+			"keccak256": "0x60c65f701957fdd6faea1acb0bb45825791d473693ed9ecb34726fdfaa849dd7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ea290300e0efc4d901244949dc4d877fd46e6c5e43dc2b26620e8efab3ab803f",
+				"dweb:/ipfs/QmcLLJppxKeJWqHxE2CUkcfhuRTgHSn8J4kijcLa5MYhSt"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/ERC20.sol": {
+			"keccak256": "0xc3e1fa9d1987f8d349dfb4d6fe93bf2ca014b52ba335cfac30bfe71e357e6f80",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c5703ccdeb7b1d685e375ed719117e9edf2ab4bc544f24f23b0d50ec82257229",
+				"dweb:/ipfs/QmTdwkbQq7owpCiyuzE7eh5LrD2ddrBCZ5WHVsWPi1RrTS"
+			]
+		},
 		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
 			"keccak256": "0xc6a8ff0ea489379b61faa647490411b80102578440ab9d84e9a957cc12164e70",
 			"license": "MIT",
 			"urls": [
 				"bzz-raw://0ea104e577e63faea3b69c415637e99e755dcbf64c5833d7140c35a714d6d90c",
 				"dweb:/ipfs/Qmau6x4Ns9XdyynRCNNp3RhLqijJjFm7z5fyZazfYFGYdq"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+			"keccak256": "0xaa761817f6cd7892fcf158b3c776b34551cde36f48ff9703d53898bc45a94ea2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0ad7c8d4d08938c8dfc43d75a148863fb324b80cf53e0a36f7e5a4ac29008850",
+				"dweb:/ipfs/QmcrhfPgVNf5mkdhQvy1pMv51TFokD3Y4Wa5WZhFqVh8UV"
 			]
 		},
 		"@openzeppelin/contracts/utils/Context.sol": {
@@ -366,27 +541,27 @@
 			]
 		},
 		"contracts/CollateralManager.sol": {
-			"keccak256": "0xea714489191aa756683b1b2d8c883feac6e9dca78739137c9381b75efcd64b3e",
+			"keccak256": "0x952bd33228421a3a1661aad291ad1ae1396c5e2900bbbdd2d8c409a8bdc0b3e4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f7a86dffcfb9d06eaaf9a96516bd5ddb584f17218b61db7c8a2279a2f2cef7ec",
-				"dweb:/ipfs/QmWS14qkDBcs3boJNibthnMSBXAnP82QwLacVATiNRf5iP"
+				"bzz-raw://2ac587dd2c76512727c02208c1d9c70b0e8577232d6fab9d97028733cfe4e20b",
+				"dweb:/ipfs/QmaBYn4uyEWYRGDSyzD4RuZGcHLBRGEDcwuoD9VmT4jXLf"
 			]
 		},
 		"contracts/LoanManager.sol": {
-			"keccak256": "0x9a768e84290bd57b9f7a57ac81bd782105d10c8e263a2baa1e46c4388e54841c",
+			"keccak256": "0x0805c805c54cf516a40f0911c746168f176407e5d20320400d2273a213659529",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8ff1c58ba925ef706bc186968baec9624644fbb7fd37cf8c06609639e88acb83",
-				"dweb:/ipfs/QmR3mhwNJ7yVQFB4AgqiuQTaR7zcqfBVCipxoqPBuLV3zh"
+				"bzz-raw://b44cae4ab346c4254654cf3008aeb3ffa39f8ad8b0287bbbb0563862f642bc92",
+				"dweb:/ipfs/QmbAShByNAY8GHAeatC7RG3XfHogW3XUzdtrxa2VMVPMS5"
 			]
 		},
 		"contracts/PriceFeedOracles.sol": {
-			"keccak256": "0xbe24d7480cb32839f495aedfd133ab32b73998e50bd214e64a7d9e6534ddbc0e",
+			"keccak256": "0xdfc3a74dea9ba83a079dbf496b29e987af21a620b8f8f8f35f4fc71c1e071a46",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bf99e3a857e9faf6a99a8910b63e34c1ce1a317ff58f7da9d3bfbb84cb61c967",
-				"dweb:/ipfs/QmQgFkdG9o4Gj6VvdgX41VRvhQfmH6Ktk6djZ32jzVwfMy"
+				"bzz-raw://ebc838af0a104d73682ab10df2e8398bde05d2de05a73747c1d2e4ac41caca84",
+				"dweb:/ipfs/Qmd7hLknM3tyyFBXmVEkCcSyapKdBr9qqywbArP6heVGGD"
 			]
 		}
 	},
