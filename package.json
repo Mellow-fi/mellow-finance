@@ -26,5 +26,10 @@
   "keywords": [
     "celo-composer",
     "celo"
-  ]
+  ],
+  "dependencies": {
+    "@types/react-router-dom": "^5.3.3",
+    "firebase": "^10.13.2",
+    "react-router-dom": "^6.26.2"
+  }
 }
