@@ -19,9 +19,11 @@
   },
   "dependencies": {
     "@celo/contractkit": "^8.1.1",
+    "@chainlink/contracts": "^1.2.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.5",
     "@openzeppelin/contracts": "^5.0.2",
     "dotenv": "^16.4.3",
-    "ethers": "^6.11.0"
+    "ethers": "^6.11.0",
+    "mocha": "^10.7.3"
   }
 }

@@ -42,7 +42,7 @@ const Login: React.FC = () => {
       {/*login button*/}
       <div>
         <button onClick={handleLogin}
-        className="px-6 py-2 bg-yellow-400 text-white rounded-full shadow-lg hover:bg-yellow-500 transition duration-300"
+        className="px-7 py-2 bg-yellow-400 text-white rounded-full shadow-lg hover:bg-yellow-500 transition duration-300"
         >BUTTON</button>
 
       </div>
