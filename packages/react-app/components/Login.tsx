@@ -5,6 +5,7 @@ import { auth } from "./firebase"; // Ensure this path is correct
 import { sendSignInLinkToEmail } from "firebase/auth";
 import { Router } from "react-router-dom";
 import { useRouter } from "next/router";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 // import image from "../static/login-image.png";
 
 const Login: React.FC = () => {
@@ -66,13 +67,14 @@ const Login: React.FC = () => {
           Send Login Link
         </button>
 
-        <button
+        {/* <button
           // onClick={}
           className="px-7 py-2 bg-black ml-3  text-white rounded-full shadow-lg hover:bg-gray-800 transition duration-300"
 
         >
           Connect to wallet
-        </button>
+        </button> */}
+        <ConnectButton />
       </div>
 
       {message && <p className="mt-4 text-green-600">{message}</p>}
