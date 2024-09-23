@@ -10,20 +10,20 @@ import { useRouter } from "next/router";
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [message, setMessage] = useState<string | null>(null);
-  
+
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
-  
+
   const router = useRouter();
   const handleLoginWithoutEmail = () => {
-   router.push('/pool-list');
+    router.push('/pool-list');
   };
 
   const handleLogin = async () => {
     const actionCodeSettings = {
-      url: 'http://localhost:3000/pool-list', 
+      url: 'http://localhost:3000/pool-list',
       handleCodeInApp: true,
     };
 
@@ -32,7 +32,7 @@ const Login: React.FC = () => {
       setMessage(`Check your email for the login link!`);
       // Save the email locally to complete the sign-in later
       window.localStorage.setItem('emailForSignIn', email);
-    } catch (error : any) {
+    } catch (error: any) {
       setMessage(error.message);
     }
   };
@@ -40,7 +40,7 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center">
       <div className="text-3xl font-semibold mb-4 text-gray-800 flex items-center">
-        <h1>Mellow M<span className="text-yellow-400 mx-1">o</span>ney Magic!</h1> 
+        <h1>Mellow M<span className="text-yellow-400 mx-1">o</span>ney Magic!</h1>
       </div>
 
       <div>
@@ -58,11 +58,20 @@ const Login: React.FC = () => {
       </div>
 
       <div>
-        <button 
+
+        <button
           onClick={handleLoginWithoutEmail}
           className="px-7 py-2 bg-yellow-400 text-white rounded-full shadow-lg hover:bg-yellow-500 transition duration-300"
         >
           Send Login Link
+        </button>
+
+        <button
+          // onClick={}
+          className="px-7 py-2 bg-black ml-3  text-white rounded-full shadow-lg hover:bg-gray-800 transition duration-300"
+
+        >
+          Connect to wallet
         </button>
       </div>
 

@@ -26,7 +26,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
           type="number"
           value={amount}
           onChange={(e) => setAmount(Number(e.target.value))}
-          placeholder="Enter amount"
+          placeholder="Enter amount of ETH to deposit"
           className="border rounded p-2 mb-4 w-full"
         />
         <div className="flex justify-end">
