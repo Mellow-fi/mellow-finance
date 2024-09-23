@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { auth } from "./firebase"; // Ensure this path is correct
 import { sendSignInLinkToEmail } from "firebase/auth";
+import { Router } from "react-router-dom";
+import { useRouter } from "next/router";
 // import image from "../static/login-image.png";
 
 const Login: React.FC = () => {
@@ -12,6 +14,11 @@ const Login: React.FC = () => {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
+  };
+  
+  const router = useRouter();
+  const handleLoginWithoutEmail = () => {
+   router.push('/pool-list');
   };
 
   const handleLogin = async () => {
@@ -52,7 +59,7 @@ const Login: React.FC = () => {
 
       <div>
         <button 
-          onClick={handleLogin}
+          onClick={handleLoginWithoutEmail}
           className="px-7 py-2 bg-yellow-400 text-white rounded-full shadow-lg hover:bg-yellow-500 transition duration-300"
         >
           Send Login Link
