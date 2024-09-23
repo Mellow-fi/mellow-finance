@@ -41,7 +41,7 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center">
       <div className="text-3xl font-semibold mb-4 text-gray-800 flex items-center">
-        <h1>Mellow M<span className="text-yellow-400 mx-1">o</span>ney Magic!</h1>
+        <h1>Mellow  M<span className="text-yellow-400 mx-1 text-6xl">o</span>ney Magic!</h1>
       </div>
 
       <div>
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
           placeholder="Your Email"
           value={email}
           onChange={handleEmailChange}
-          className="border rounded p-2"
+          className="border rounded p-2 mb-4 w-full"
         />
       </div>
 
@@ -62,9 +62,9 @@ const Login: React.FC = () => {
 
         <button
           onClick={handleLoginWithoutEmail}
-          className="px-7 py-2 bg-yellow-400 text-white rounded-full shadow-lg hover:bg-yellow-500 transition duration-300"
+          className="mt-4 px-7 py-2 bg-yellow-400 text-white rounded-full shadow-lg hover:bg-yellow-500 transition duration-300"
         >
-          Send Login Link
+           Login here
         </button>
 
         {/* <button
@@ -74,7 +74,9 @@ const Login: React.FC = () => {
         >
           Connect to wallet
         </button> */}
-        <ConnectButton />
+        <div className="mt-4">
+        <ConnectButton  />
+        </div>
       </div>
 
       {message && <p className="mt-4 text-green-600">{message}</p>}
