@@ -1,11 +1,14 @@
+'use client'
+
 import React, { useState } from "react";
 import { auth } from "./firebase"; // Ensure this path is correct
 import { sendSignInLinkToEmail } from "firebase/auth";
-import image from "../static/login-image.png";
+// import image from "../static/login-image.png";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [message, setMessage] = useState<string | null>(null);
+  
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
