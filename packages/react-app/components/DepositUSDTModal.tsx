@@ -9,22 +9,13 @@ type DepositModalProps = {
 };
 
 const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit }) => {
-  // Automatically set address when account changes
-  const { address } = useWeb3();
+  // Get the signed in address
+  const { address, depositUsdtCollateral } = useWeb3();
   const [uAddress, setUserAddress] = useState<string | null>(address ?? null);
 
   useEffect(() => {
     setUserAddress(address ?? null);
   }, [address]);
-
-  const {
-    // UserAddress,
-    depositCeloCollateral,
-    address: userAddress,
-  } = useWeb3();
-
-
-  
   const [amount, setAmount] = useState<number>(0);
 
   const handleDeposit = () => {
@@ -32,10 +23,9 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
     onDeposit(amount);
     onClose(); // Close the modal after deposit
   };
-
-  const handleDepositCeloCollateral = async () => {
+  const handleDepositCEURCollateral = async () => {
     try{
-      const tx = await depositCeloCollateral(amount.toString());
+      const tx = await depositUsdtCollateral(amount.toString());
       // await signTransaction(tx);
     } catch (error) {
       console.error(error);
@@ -61,7 +51,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
           <button className="mr-2 text-gray-500" onClick={onClose}>
             Cancel
           </button>
-          <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={handleDepositCeloCollateral}>
+          <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={handleDepositCEURCollateral}>
             Deposit
           </button>
         </div>

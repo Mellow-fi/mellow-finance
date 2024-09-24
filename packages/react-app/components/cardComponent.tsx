@@ -1,7 +1,7 @@
 // CardComponent.tsx
-import React, { useState } from 'react';
-// import DepositModal from './DepositModal';
-import DepositCeloModal from './DepositCeloModal';
+import React, { useState, useEffect } from 'react';
+import DepositModal from './DepositModal';
+import { useWeb3 } from '@/contexts/useWeb3';
 
 type CardProps = {
   title: string;
@@ -10,12 +10,33 @@ type CardProps = {
 };
 
 const CardComponent: React.FC<CardProps> = ({ title, interestRate, imageUrl }) => {
+  // get connected wallet address
+  const { address,depositCeloCollateral,depositUsdtCollateral } = useWeb3();
+  useEffect(() => {
+    setUserAddress(address ?? null);
+  }, [address]); // Make sure to update the address when it changes
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleDeposit = (amount: number) => {
-    // Here you would implement wallet connection logic
-    console.log(`Deposited: ${amount}`); // Implement your deposit logic here
-    // After successful deposit, you can proceed to grant the loan
+  const [uAddress, setUserAddress] = useState<string | null>(address ?? null); // Set the user address
+  
+  const handleDepositCeloCollateral = async (amount: number) => {
+    try {
+      const tx = await depositCeloCollateral(amount.toString());
+      // await signTransaction(tx);
+      console.log("Celo collateral deposited: ", amount);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleDepositCEURCollateral = async (amount: number) => {
+    try {
+      const tx = await depositUsdtCollateral(amount.toString());
+      // await signTransaction(tx);
+      console.log("USDT collateral deposited: ", amount);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleBorrowClick = () => {
@@ -35,10 +56,12 @@ const CardComponent: React.FC<CardProps> = ({ title, interestRate, imageUrl }) =
           Borrow
         </button>
       </div>
-      <DepositCeloModal
+      <DepositModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)} // Close modal
-        onDeposit={handleDeposit}
+        onDepositCelo={handleDepositCeloCollateral}
+        onDepositStableCoin={handleDepositCEURCollateral} // Pass both functions
+        title={title} // Pass the card title to modal
       />
     </div>
   );
