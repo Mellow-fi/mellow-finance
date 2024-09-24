@@ -1,6 +1,7 @@
 // CardComponent.tsx
 import React, { useState } from 'react';
-import DepositModal from './DepositModal';
+// import DepositModal from './DepositModal';
+import DepositCeloModal from './DepositCeloModal';
 
 type CardProps = {
   title: string;
@@ -34,7 +35,7 @@ const CardComponent: React.FC<CardProps> = ({ title, interestRate, imageUrl }) =
           Borrow
         </button>
       </div>
-      <DepositModal
+      <DepositCeloModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)} // Close modal
         onDeposit={handleDeposit}

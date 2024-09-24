@@ -7,9 +7,6 @@ import CollateralManagerABI from "./CollateralManager.json";
 import LoanManagerABI from "./LoanManager.json";
 
 
-
-
-
 export const useWeb3 = () => {
   const [address, setAddress] = useState<string | null>(null);
   const cUSDTokenAddress = "0x765de816845861e75a25fca122bb6898b8b1282a";
@@ -18,14 +15,10 @@ export const useWeb3 = () => {
   const cUER_CONTRACT_ADDRESS = "0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f";
   const cusd_CONTRACT_ADDRESS = "0x874069fa1eb16d44d622f2e0ca25eea172369bc1";
 
-
+  const account = useAccount();
   const getUserAddress = async () => {
-    if (typeof window !== "undefined" && window.ethereum) {
-      const provider = new BrowserProvider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = await provider.getSigner();
-      const addressFromWallet = await signer.getAddress(); 
-      setAddress(addressFromWallet);
+    if (typeof window !== "undefined" && window.ethereum) { 
+      setAddress(account.address || null);
     }
   };
 
