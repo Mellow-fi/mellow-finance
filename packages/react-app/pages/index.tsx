@@ -116,10 +116,10 @@
 //     </div>
 //   );
 // }
-import Login from "@/components/Login";
+import LandingPage from "@/components/LandinPage";
 
 const Home = () => {
-  return <Login />;
+  return <LandingPage />;
 };
 
 export default Home;
