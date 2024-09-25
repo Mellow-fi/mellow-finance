@@ -3,11 +3,15 @@ import { useAccount } from "wagmi";
 import { useState, useEffect } from "react";
 import StableTokenABI from "./cusd-abi.json";
 import CollateralManagerABI from "./CollateralManager.json";
+import LoanManagerABI from "./LoanManager.json"
+import { Address } from "viem";
 
 export const useWeb3 = () => {
   const { address } = useAccount();
   const COLLATERAL_MANAGER_CONTRACT = "0xf3978E55d052124178dBd34729dab91cD39dc23D";
   const cUER_CONTRACT_ADDRESS = "0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f";
+  const LOAN_MANAGER_CONTRACT = "0x20dc701Ef6265C7Fb6a81680aB662205Ce5d10D8";
+  const cKES_MOCK_TOCKEN = "0x874069fa1eb16d44d622f2e0ca25eea172369bc1";
 
   
 
@@ -35,6 +39,13 @@ export const useWeb3 = () => {
     return tx;
   };
 
+  const executeReadOnly = async ({ contractAddress, abi, method, args }: ExecuteTransactionParams): Promise<any> => {
+    const signer = await getSigner();
+    const contract = new Contract(contractAddress, abi, signer);
+    const result = await contract[method](...args);  // Call the read-only method
+    return result;  // Return the result directly
+  };
+
   const depositCeloCollateral = async (amount: string) => {
     const amountInWei = parseUnits(amount, 18);
     return await executeTransaction({ contractAddress: COLLATERAL_MANAGER_CONTRACT, abi: CollateralManagerABI.abi, method: "depositCeloCollateral", args: [{ value: amountInWei }] });
@@ -50,6 +61,10 @@ export const useWeb3 = () => {
     return await executeTransaction({ contractAddress: COLLATERAL_MANAGER_CONTRACT, abi: CollateralManagerABI.abi, method: "depositUsdtCollateral", args: [amountInWei] });
   };
 
+  const getMaxLoanAmount = async () => {
+    return await executeReadOnly({ contractAddress: LOAN_MANAGER_CONTRACT, abi: LoanManagerABI.abi, method: "getMaxLoanAmount", args: [] });
+  };
+
   const signTransaction = async () => {
     const signer = await getSigner();
     const res = await signer.signMessage(`Hello from Celo Composer Valora Template!`);
@@ -62,5 +77,6 @@ export const useWeb3 = () => {
     signTransaction,
     depositCeloCollateral,
     depositUsdtCollateral,
+    getMaxLoanAmount,
   };
 };
