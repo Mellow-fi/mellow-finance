@@ -10,7 +10,7 @@ interface LoanData {
 
 const LoanDashboard: React.FC = () => {
   const [loanData, setLoanData] = useState<LoanData | null>(null);
-  const { getMaxLoanAmount } = useWeb3(); // Access getMaxLoanAmount from useWeb3
+  const { getMaxLoanAmount, getCollateralBalanceinUSD } = useWeb3(); // Access getMaxLoanAmount from useWeb3
 
   useEffect(() => {
     const fetchLoanData = async () => {
@@ -18,14 +18,15 @@ const LoanDashboard: React.FC = () => {
         // Call the getMaxLoanAmount function from the contract
         const maxLoanAmount = await getMaxLoanAmount();
         // Get the user collateral
+        const uCollat = await getCollateralBalanceinUSD();
         // Get the LTV for loans
         // Sufficiently collateralized
         
         // Update loan data based on the fetched max loan amount
         const updatedLoanData: LoanData = {
           loanAmount: parseFloat(maxLoanAmount), // Convert to a number if necessary
-          collateralAmount: 10000, // Placeholder collateral amount
-          loanToValueRatio: 0.5,  // Placeholder LTV ratio
+          collateralAmount: parseFloat(uCollat), // Placeholder collateral amount
+          loanToValueRatio: 15,  // Placeholder LTV ratio
           isSufficientlyCollateralized: true, // Placeholder collateralization status
         };
 
@@ -36,7 +37,7 @@ const LoanDashboard: React.FC = () => {
     };
 
     fetchLoanData();
-  }, [getMaxLoanAmount]); // Re-run when getMaxLoanAmount changes
+  }, [getMaxLoanAmount, getCollateralBalanceinUSD]); // Re-run when getMaxLoanAmount changes
 
   const handleBorrowLoan =()=>{
     alert("Borrowing loan...");

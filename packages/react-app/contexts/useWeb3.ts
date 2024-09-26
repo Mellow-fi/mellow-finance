@@ -66,6 +66,11 @@ export const useWeb3 = () => {
     return max_amount;
   };
 
+  const getCollateralBalanceinUSD = async () => {
+    const max_amount =  await executeReadOnly({ contractAddress: COLLATERAL_MANAGER_CONTRACT, abi: LoanManagerABI.abi, method: "getCollateralBalanceinUSD", args: [address] });
+    return max_amount;
+  };
+
   const signTransaction = async () => {
     const signer = await getSigner();
     const res = await signer.signMessage(`Hello from Celo Composer Valora Template!`);
@@ -79,5 +84,6 @@ export const useWeb3 = () => {
     depositCeloCollateral,
     depositUsdtCollateral,
     getMaxLoanAmount,
+    getCollateralBalanceinUSD,
   };
 };
