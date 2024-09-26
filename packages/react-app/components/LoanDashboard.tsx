@@ -38,6 +38,9 @@ const LoanDashboard: React.FC = () => {
     fetchLoanData();
   }, [getMaxLoanAmount]); // Re-run when getMaxLoanAmount changes
 
+  const handleBorrowLoan =()=>{
+    alert("Borrowing loan...");
+  }
   if (!loanData) {
     return <div>Loading...</div>;
   }
@@ -57,6 +60,8 @@ const LoanDashboard: React.FC = () => {
             <span className="text-red-500 font-semibold"> Insufficient</span>
           )}
         </p>
+        {/*borrow loan button*/}
+        <button onClick={handleBorrowLoan} className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded">Borrow Loan</button>
       </div>
     </div>
   );
