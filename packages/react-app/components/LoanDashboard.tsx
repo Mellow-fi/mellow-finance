@@ -10,7 +10,7 @@ interface LoanData {
 
 const LoanDashboard: React.FC = () => {
   const [loanData, setLoanData] = useState<LoanData | null>(null);
-  const { getMaxLoanAmount, getCollateralBalanceinUSD } = useWeb3(); // Access getMaxLoanAmount from useWeb3
+  const { getMaxLoanAmount, getCollateralBalanceinUSD, requestLoan } = useWeb3(); // Access getMaxLoanAmount from useWeb3
 
   useEffect(() => {
     const fetchLoanData = async () => {
@@ -39,11 +39,26 @@ const LoanDashboard: React.FC = () => {
     fetchLoanData();
   }, [getMaxLoanAmount, getCollateralBalanceinUSD]); // Re-run when getMaxLoanAmount changes
 
-  const handleBorrowLoan =()=>{
-    alert("Borrowing loan...");
-  }
-  if (!loanData) {
-    return <div>Loading...</div>;
+  // const handleBorrowLoan =()=>{
+  //   alert("Borrowing loan...");
+  // }
+  // if (!loanData) {
+  //   return <div>Loading...</div>;
+  // }
+  
+  const handleBorrowLoan = async () => {
+    try {
+      if (loanData) {
+        // Call the requestLoan function from the contract
+        await requestLoan(loanData.loanAmount.toString());
+        alert("Loan request successful!");
+      } else {
+        console.error("Loan data is null.");
+      }
+    } catch (error) {
+      console.error("Error borrowing loan:", error);
+      alert("Error borrowing loan. Please try again.");
+    }
   }
 
   return (
@@ -51,11 +66,11 @@ const LoanDashboard: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4">Loan Dashboard</h2>
       <div className="bg-white p-4 rounded-lg shadow-lg">
         <h3 className="text-xl font-medium mb-2">Your Loan</h3>
-        <p><strong>Loan Amount:</strong> ${loanData.loanAmount.toLocaleString()}</p>
-        <p><strong>Collateral Amount:</strong> ${loanData.collateralAmount.toLocaleString()}</p>
-        <p><strong>Loan-to-Value (LTV) Ratio:</strong> {loanData.loanToValueRatio * 100}%</p>
+        <p><strong>Loan Amount:</strong> ${loanData?.loanAmount?.toLocaleString()}</p>
+        <p><strong>Collateral Amount:</strong> ${loanData?.collateralAmount.toLocaleString()}</p>
+        <p><strong>Loan-to-Value (LTV) Ratio:</strong> {loanData?.loanToValueRatio ? loanData.loanToValueRatio * 100 : 0}%</p>
         <p><strong>Collateralization Status:</strong> 
-          {loanData.isSufficientlyCollateralized ? (
+          {loanData?.isSufficientlyCollateralized ? (
             <span className="text-green-500 font-semibold"> Sufficient</span>
           ) : (
             <span className="text-red-500 font-semibold"> Insufficient</span>
