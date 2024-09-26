@@ -62,7 +62,8 @@ export const useWeb3 = () => {
   };
 
   const getMaxLoanAmount = async () => {
-    return await executeReadOnly({ contractAddress: LOAN_MANAGER_CONTRACT, abi: LoanManagerABI.abi, method: "getMaxLoanAmount", args: [] });
+    const max_amount =  await executeReadOnly({ contractAddress: LOAN_MANAGER_CONTRACT, abi: LoanManagerABI.abi, method: "getMaxLoanAmount", args: [] });
+    return max_amount;
   };
 
   const signTransaction = async () => {

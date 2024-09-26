@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useWeb3 } from '@/contexts/useWeb3';  // Make sure this is the correct path to the useWeb3 hook
 
 interface LoanData {
   loanAmount: number;
@@ -9,23 +10,33 @@ interface LoanData {
 
 const LoanDashboard: React.FC = () => {
   const [loanData, setLoanData] = useState<LoanData | null>(null);
+  const { getMaxLoanAmount } = useWeb3(); // Access getMaxLoanAmount from useWeb3
 
-  // Fetch loan data (replace with actual API call)
   useEffect(() => {
-    
-    // Mock data for now
     const fetchLoanData = async () => {
-      const mockLoanData: LoanData = {
-        loanAmount: 5000,
-        collateralAmount: 10000,
-        loanToValueRatio: 0.5,  // 50% Loan-to-Value (LTV) ratio
-        isSufficientlyCollateralized: true,
-      };
-      setLoanData(mockLoanData);
+      try {
+        // Call the getMaxLoanAmount function from the contract
+        const maxLoanAmount = await getMaxLoanAmount();
+        // Get the user collateral
+        // Get the LTV for loans
+        // Sufficiently collateralized
+        
+        // Update loan data based on the fetched max loan amount
+        const updatedLoanData: LoanData = {
+          loanAmount: parseFloat(maxLoanAmount), // Convert to a number if necessary
+          collateralAmount: 10000, // Placeholder collateral amount
+          loanToValueRatio: 0.5,  // Placeholder LTV ratio
+          isSufficientlyCollateralized: true, // Placeholder collateralization status
+        };
+
+        setLoanData(updatedLoanData);
+      } catch (error) {
+        console.error("Error fetching loan data:", error);
+      }
     };
 
     fetchLoanData();
-  }, []);
+  }, [getMaxLoanAmount]); // Re-run when getMaxLoanAmount changes
 
   if (!loanData) {
     return <div>Loading...</div>;
