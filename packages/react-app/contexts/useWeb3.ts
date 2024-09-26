@@ -67,8 +67,8 @@ export const useWeb3 = () => {
   };
 
   const getCollateralBalanceinUSD = async () => {
-    const max_amount =  await executeReadOnly({ contractAddress: COLLATERAL_MANAGER_CONTRACT, abi: LoanManagerABI.abi, method: "getCollateralBalanceinUSD", args: [address] });
-    return max_amount;
+    const userColl =  await executeReadOnly({ contractAddress: COLLATERAL_MANAGER_CONTRACT, abi: CollateralManagerABI.abi, method: "getCollateralBalanceinUSD", args: [address] });
+    return userColl;
   };
 
   const signTransaction = async () => {

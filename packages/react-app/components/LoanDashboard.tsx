@@ -26,7 +26,7 @@ const LoanDashboard: React.FC = () => {
         const updatedLoanData: LoanData = {
           loanAmount: parseFloat(maxLoanAmount), // Convert to a number if necessary
           collateralAmount: parseFloat(uCollat), // Placeholder collateral amount
-          loanToValueRatio: 15,  // Placeholder LTV ratio
+          loanToValueRatio: 1.5,  // Placeholder LTV ratio
           isSufficientlyCollateralized: true, // Placeholder collateralization status
         };
 
