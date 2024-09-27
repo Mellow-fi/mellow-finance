@@ -97,7 +97,7 @@ contract LoanManager is ReentrancyGuard, Ownable {
         (uint256 userColCelo, uint256 userColStable ) = collateralManager.getCollateralBalance(msg.sender);
         uint256 celoPriceInUSD = uint256(getCeloPrice());
         uint256 usdtPriceInUSD = uint256(getUsdtPrice());
-        uint256 totalCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e10 + (userColStable * usdtPriceInUSD) / (1e10);
+        uint256 totalCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18 + (userColStable * usdtPriceInUSD) / (1e18);
         return totalCollateralInUSD;
     }
 
@@ -175,6 +175,14 @@ contract LoanManager is ReentrancyGuard, Ownable {
     function getLoanBalancewithInterest(address _user) external view returns (uint256) {
         Loan memory loan = userLoans[_user];
         return loan.amount + (loan.amount * loan.interestRate / 100);
+    }
+
+    function getCollateralBalanceinUSD(address _user) external view returns (uint256) {
+        (uint256 userColCelo, uint256 userColStable) = collateralManager.getCollateralBalance(_user);
+        uint256 celoPriceInUSD = uint256(getCeloPrice());
+        uint256 usdtPriceInUSD = uint256(getUsdtPrice());
+        uint256 totalCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18 + (userColStable * usdtPriceInUSD) / 1e18;
+        return totalCollateralInUSD;
     }
 
     

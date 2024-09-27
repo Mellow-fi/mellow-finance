@@ -36,7 +36,7 @@ async function main() {
 
     // Deploy Loan Manager
     const Loan = await hre.ethers.getContractFactory("LoanManager");
-    const loan = await Loan.deploy("0xa9625e5FdCB2e903b90222A14b118E5549589CCa", "0x218256e83664e503AE44d207F6E877dDC5174850", "0x3F1615698CA1809eBF316be73B68BF0234A0B2ad", {});
+    const loan = await Loan.deploy("0x874069fa1eb16d44d622f2e0ca25eea172369bc1", "0x0FfC028b09b27B43dcC611E08b654E19ae77ABb7", {});
     await loan.waitForDeployment();
     logContractDeployed("LoanManager", loan);
 

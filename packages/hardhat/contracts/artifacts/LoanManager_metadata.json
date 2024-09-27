@@ -248,6 +248,25 @@
 						"type": "address"
 					}
 				],
+				"name": "getCollateralBalanceinUSD",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_user",
+						"type": "address"
+					}
+				],
 				"name": "getLoanBalancewithInterest",
 				"outputs": [
 					{
@@ -589,11 +608,11 @@
 			]
 		},
 		"contracts/LoanManager.sol": {
-			"keccak256": "0xa8b3d6fe803eaf6bcea8f9954f89171213eecd384c5910819cac58028bd3fe7d",
+			"keccak256": "0x3050ee3149b9c949e58169e653c4cca0b898ff586b00185492e06244b3c123c2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3224af86c1a039e4d2e3ddf6905ac5b71a6b5c8d28a8bc1f9eb11406343d2a45",
-				"dweb:/ipfs/QmVdPCc4AVCXrcQVTKyrbwUMW1TW3Ds2g9dHVQbjTya45C"
+				"bzz-raw://f2ff617071716131cbafc890872687bd04791adf49a0cde7d06fc13ea468252f",
+				"dweb:/ipfs/QmSNg3gmuRLwx3WLUUspBkQ882cjkp1JaBUsxJxpLJzNJ9"
 			]
 		}
 	},
