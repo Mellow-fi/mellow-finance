@@ -10,7 +10,7 @@ interface LoanData {
 
 const LoanDashboard: React.FC = () => {
   const [loanData, setLoanData] = useState<LoanData | null>(null);
-  const { getMaxLoanAmount, getCollateralBalanceinUSD, requestLoan } = useWeb3(); // Access getMaxLoanAmount from useWeb3
+  const { getMaxLoanAmount, getCollateralBalanceinUSD, requestLoan, releaseFunds } = useWeb3(); // Access getMaxLoanAmount from useWeb3
 
   useEffect(() => {
     const fetchLoanData = async () => {
@@ -61,6 +61,34 @@ const LoanDashboard: React.FC = () => {
     }
   }
 
+  const handleBorrowWithAmount = async () => {
+    try {
+      if (borrowAmount) {
+        // Call the requestLoan function from the contract
+        await requestLoan(borrowAmount.toString());
+        // console.log(borrowAmount);
+        alert("Loan request successful!");
+      } else {
+        console.error("Borrow amount is null.");
+      }
+    } catch (error) {
+      console.error("Error borrowing loan:", error);
+      alert("Error borrowing loan. Please try again.");
+    }
+  }
+
+  const handleWithdrawCollateral = async () => {
+    try {
+      // Call the releaseFunds function from the contract
+      await releaseFunds();
+      alert("Collateral withdrawal successful!");
+    } catch (error) {
+      console.error("Error withdrawing collateral:", error);
+      alert("Error withdrawing collateral. Please try again.");
+    }
+  }
+
+
   return (
     <div>
     <Navbar />
@@ -91,9 +119,9 @@ const LoanDashboard: React.FC = () => {
         />
         <button onClick={handleBorrowLoan} className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 mt-4 px-4 rounded">submit borrow Loan</button>
         {/*borrow loan button*/}
-        <button onClick={handleBorrowLoan} className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded">Borrow Loan</button>
+        <button onClick={handleBorrowWithAmount} className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded">Borrow Loan</button>
 
-        <button onClick={handleBorrowLoan} className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded">withdraw collateral</button>
+        <button onClick={handleWithdrawCollateral} className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded">withdraw collateral</button>
 
       </div>
     </div>
