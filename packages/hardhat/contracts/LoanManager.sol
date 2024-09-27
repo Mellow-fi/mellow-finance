@@ -73,7 +73,7 @@ contract LoanManager is ReentrancyGuard, Ownable {
         uint256 celoCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18;
         uint256 stableCollateralInUSD = (userColStable * usdtPriceInUSD) / 1e18;
         uint256 userTotalColinUSD = celoCollateralInUSD + stableCollateralInUSD;
-        require(userTotalColinUSD >= _loanAmount, "LoanManager: Insufficient collateral");
+        require(_loanAmount < userTotalColinUSD, "LoanManager: Insufficient collateral");
         
         // Store loan information
         Loan memory newLoan = Loan({
