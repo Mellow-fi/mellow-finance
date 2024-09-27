@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useWeb3 } from '@/contexts/useWeb3';  // Make sure this is the correct path to the useWeb3 hook
+import { useWeb3 } from '@/contexts/useWeb3';  // Ensure this is the correct path to the useWeb3 hook
 import Navbar from './NavBar';
 import Footer from './Footer';
-
 
 interface LoanData {
   loanAmount: number;
@@ -13,7 +12,7 @@ interface LoanData {
 
 const LoanDashboard: React.FC = () => {
   const [loanData, setLoanData] = useState<LoanData | null>(null);
-  const { getMaxLoanAmount, getCollateralBalanceinUSD, requestLoan } = useWeb3(); 
+  const { getMaxLoanAmount, getCollateralBalanceinUSD, requestLoan, repayLoan } = useWeb3();
 
   useEffect(() => {
     const fetchLoanData = async () => {
@@ -50,6 +49,20 @@ const LoanDashboard: React.FC = () => {
     }
   };
 
+  const handleRepayLoan = async () => {
+    try {
+      if (loanData) {
+        await repayLoan(loanData.loanAmount.toString());
+        alert("Loan repayment successful!");
+      } else {
+        console.error("Loan data is null.");
+      }
+    } catch (error) {
+      console.error("Error repaying loan:", error);
+      alert("Error repaying loan. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
@@ -77,7 +90,7 @@ const LoanDashboard: React.FC = () => {
             <div className="mt-4">
               <button
                 onClick={handleBorrowLoan}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"
+                className="w-50 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"
               >
                 Borrow Loan
               </button>
@@ -103,7 +116,7 @@ const LoanDashboard: React.FC = () => {
             <div className="mt-4">
               <button
                 onClick={handleBorrowLoan}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"
+                className="w-50 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"
               >
                 Submit Borrow Loan
               </button>
@@ -111,16 +124,31 @@ const LoanDashboard: React.FC = () => {
           </div>
         </div>
 
+        {/* New Card: Loan Repayment */}
+        <div className="mt-6 bg-white p-4 rounded-lg shadow-md">
+          <h3 className="text-xl font-semibold mb-4">Repay Loan</h3>
+          <p className="text-gray-700 text-sm">
+            <strong>Loan Taken:</strong> ${loanData?.loanAmount?.toLocaleString()}
+          </p>
+          <div className="mt-4">
+            <button
+              onClick={handleRepayLoan}
+              className="w-50  bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-red-300 text-sm"
+            >
+              Repay Loan
+            </button>
+          </div>
+        </div>
+
         {/* Withdraw Collateral Button below the cards */}
         <div className="mt-6">
           <button
             onClick={handleBorrowLoan}
-            className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"
+            className="w-50 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"
           >
             Withdraw Collateral
           </button>
         </div>
-
       </div>
       <Footer />
     </div>
