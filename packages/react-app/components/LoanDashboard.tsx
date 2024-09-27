@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useWeb3 } from '@/contexts/useWeb3';  // Ensure this is the correct path to the useWeb3 hook
+import { useWeb3 } from '@/contexts/useWeb3';  
 import Navbar from './NavBar';
 import Footer from './Footer';
+import { useRouter } from 'next/router'; 
 
 interface LoanData {
   loanAmount: number;
@@ -13,6 +14,7 @@ interface LoanData {
 const LoanDashboard: React.FC = () => {
   const [loanData, setLoanData] = useState<LoanData | null>(null);
   const { getMaxLoanAmount, getCollateralBalanceinUSD, requestLoan, repayLoan } = useWeb3();
+  const router = useRouter(); 
 
   useEffect(() => {
     const fetchLoanData = async () => {
@@ -63,20 +65,24 @@ const LoanDashboard: React.FC = () => {
     }
   };
 
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <div className="flex-grow max-w-4xl mx-auto p-6">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">Loan Dashboard</h2>
 
-        {/* Grid layout with increased gap for more whitespace */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8"> {/* Increased gap from 6 to 8 */}
+       
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {/* Card 1: Your Loan & Borrow Loan Button */}
-          <div className="bg-white p-4 rounded-lg shadow-lg"> {/* Enhanced shadow */}
+          
+          <div className="bg-white p-4 rounded-lg shadow-lg">
             <h3 className="text-2xl font-bold mb-4">Your Loan</h3>
             <div className="space-y-3 text-gray-700 text-sm">
-              <p><strong>Loan Amount:</strong> ${loanData?.loanAmount?.toLocaleString()}</p>
+              <p><strong>Available Loan Amount:</strong> ${loanData?.loanAmount?.toLocaleString()}</p>
               <p><strong>Collateral Amount:</strong> ${loanData?.collateralAmount.toLocaleString()}</p>
               <p><strong>Loan-to-Value (LTV) Ratio:</strong> {loanData?.loanToValueRatio ? loanData.loanToValueRatio * 100 : 0}%</p>
               <p><strong>Collateralization Status:</strong>
@@ -90,15 +96,15 @@ const LoanDashboard: React.FC = () => {
             <div className="mt-4">
               <button
                 onClick={handleBorrowLoan}
-                className="w-50  bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
+                className="w-50 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
               >
                 Borrow Loan
               </button>
             </div>
           </div>
 
-          {/* Card 2: Enter Loan Amount & Submit Borrow Loan Button */}
-          <div className="bg-gray-100 p-4 rounded-lg shadow-lg"> {/* Enhanced shadow */}
+         
+          <div className="bg-gray-100 p-4 rounded-lg shadow-lg">
             <h3 className="text-2xl font-bold mb-4">Enter Loan Amount</h3>
             <div className="mt-4">
               <label htmlFor="borrowAmount" className="block text-sm font-medium text-gray-700 mb-2">
@@ -107,7 +113,7 @@ const LoanDashboard: React.FC = () => {
               <input
                 type="number"
                 id="borrowAmount"
-                value={ borrowAmount ?? ""}
+                value={borrowAmount ?? ""}
                 onChange={(e) => setBorrowAmount(e.target.value)}
                 className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400 text-sm"
                 placeholder="Enter loan amount you want to borrow"
@@ -116,7 +122,7 @@ const LoanDashboard: React.FC = () => {
             <div className="mt-4">
               <button
                 onClick={handleBorrowLoan}
-                className="w-50  bg-yellow-400  hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
+                className="w-50 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
               >
                 Submit Borrow Loan
               </button>
@@ -124,8 +130,8 @@ const LoanDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* New Card: Loan Repayment */}
-        <div className="mt-8 bg-gray-100 p-4 rounded-lg shadow-lg"> {/* Enhanced shadow and increased margin-top */}
+        
+        <div className="mt-8 bg-gray-100 p-4 rounded-lg shadow-lg">
           <h3 className="text-2xl font-bold mb-4">Repay Loan</h3>
           <p className="text-gray-700 text-sm">
             <strong>Loan Taken:</strong> ${loanData?.loanAmount?.toLocaleString()}
@@ -133,20 +139,30 @@ const LoanDashboard: React.FC = () => {
           <div className="mt-4">
             <button
               onClick={handleRepayLoan}
-              className="w-50  bg-yellow-400  hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-300 text-sm"
+              className="w-50 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-300 text-sm"
             >
               Repay Loan
             </button>
           </div>
         </div>
 
-        {/* Withdraw Collateral Button below the cards */}
-        <div className="mt-8"> {/* Increased margin-top for separation */}
+       
+        <div className="mt-8">
           <button
             onClick={handleBorrowLoan}
             className="w-50 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"
           >
             Withdraw Collateral
+          </button>
+        </div>
+
+       
+        <div className="mt-8">
+          <button
+            onClick={handleBack}
+            className="w-50 bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm"
+          >
+            Back to Pool List
           </button>
         </div>
       </div>
