@@ -79,7 +79,7 @@ contract CollateralManager is ReentrancyGuard, Pausable, Ownable {
     function getCollateralBalanceinUSD(address _user) external view returns (uint256) {
         uint256 celoPriceInUSD = uint256(priceOracle.getCeloPrice());
         uint256 usdtPriceInUSD = uint256(priceOracle.getUsdtPrice());
-        uint256 totalCollateralInUSD = userCollateralCelo[_user] * celoPriceInUSD / (1e18) + userCollateralUsdt[_user] * usdtPriceInUSD / (1e18);
+        uint256 totalCollateralInUSD = userCollateralCelo[_user] * celoPriceInUSD / (1e8) + userCollateralUsdt[_user] * usdtPriceInUSD / (1e8);
         return totalCollateralInUSD;
     }
 
