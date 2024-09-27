@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { auth } from "./firebase"; // Ensure this path is correct
 import { sendSignInLinkToEmail } from "firebase/auth";
 import { useRouter } from "next/router";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Navbar from "./NavBar";
 import Footer from "./Footer";
+import Image from "next/image";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
         </div>
 
         <div>
-          <img src="../static/login-image.png" alt="Cat Image" />
+          <Image src="/../static/login-image.png" alt="Cat Image" width={400} height={400}/>
         </div>
 
         <div>
@@ -60,7 +60,7 @@ const Login: React.FC = () => {
 
         <div>
           <button
-            onClick={handleLogin}
+            onClick={handleLoginWithoutEmail}
             className="mt-4 px-7 py-2 bg-yellow-400 text-black rounded-full shadow-lg hover:bg-yellow-500 transition duration-300"
           >
             Login here

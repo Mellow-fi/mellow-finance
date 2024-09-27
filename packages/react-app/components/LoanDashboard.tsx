@@ -47,7 +47,13 @@ const LoanDashboard: React.FC = () => {
   const handleBorrowLoan = async () => {
     try {
       if (loanData) {
-        await requestLoan(loanData.loanAmount.toString());
+        const loanAmountStr = loanData.loanAmount.toString();
+        const loanAmountFloat = parseFloat(loanAmountStr);
+        const loanAmountInWei = (loanAmountFloat * Math.pow(10, 18));
+        const reducedLoanAmountInWei = (loanAmountInWei * 0.99).toString();
+        console.log(loanAmountInWei);
+        await requestLoan(reducedLoanAmountInWei);
+        
         alert("Loan request successful!");
       } else {
         console.error("Loan data is null.");
@@ -89,8 +95,8 @@ const LoanDashboard: React.FC = () => {
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <h3 className="text-2xl font-bold mb-4">Your Loan</h3>
             <div className="space-y-3 text-gray-700 text-sm">
-              <p><strong>Available Loan Amount:</strong> ${loanData?.loanAmount?.toLocaleString()}</p>
-              <p><strong>Collateral Amount:</strong> ${loanData?.collateralAmount.toLocaleString()}</p>
+              <p><strong>Available Loan Amount:</strong> ${loanData?.collateralAmount?.toLocaleString()}</p>
+              <p><strong>Collateral Amount:</strong> ${loanData?.loanAmount.toLocaleString()}</p>
               <p><strong>Loan-to-Value (LTV) Ratio:</strong> {loanData?.loanToValueRatio ? loanData.loanToValueRatio * 100 : 0}%</p>
               <p><strong>Collateralization Status:</strong>
                 {loanData?.isSufficientlyCollateralized ? (
