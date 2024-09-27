@@ -50,7 +50,7 @@ const LoanDashboard: React.FC = () => {
         const loanAmountStr = loanData.loanAmount.toString();
         const loanAmountFloat = parseFloat(loanAmountStr);
         const loanAmountInWei = (loanAmountFloat * Math.pow(10, 18));
-        const reducedLoanAmountInWei = (loanAmountInWei * 0.99).toString();
+        const reducedLoanAmountInWei = (loanAmountInWei * 0.5).toString();
         console.log(loanAmountInWei);
         await requestLoan(reducedLoanAmountInWei);
         
