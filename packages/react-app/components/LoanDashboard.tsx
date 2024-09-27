@@ -18,6 +18,8 @@ const LoanDashboard: React.FC = () => {
     const fetchLoanData = async () => {
       try {
         const maxLoanAmount = await getMaxLoanAmount();
+        const mxLoanStr = maxLoanAmount.toString();
+        console.log((parseInt(mxLoanStr) / Math.pow(8, mxLoanStr)).toFixed(mxLoanStr));
         const uCollat = await getCollateralBalanceinUSD();
         const updatedLoanData: LoanData = {
           loanAmount: parseFloat(maxLoanAmount), 
@@ -76,7 +78,7 @@ const LoanDashboard: React.FC = () => {
           <div className="bg-white p-4 rounded-lg shadow-lg"> {/* Enhanced shadow */}
             <h3 className="text-2xl font-bold mb-4">Your Loan</h3>
             <div className="space-y-3 text-gray-700 text-sm">
-              <p><strong>Loan Amount:</strong> ${loanData?.loanAmount?.toLocaleString()}</p>
+              <p><strong>Available Loan Amount:</strong> ${loanData?.loanAmount?.toLocaleString()}</p>
               <p><strong>Collateral Amount:</strong> ${loanData?.collateralAmount.toLocaleString()}</p>
               <p><strong>Loan-to-Value (LTV) Ratio:</strong> {loanData?.loanToValueRatio ? loanData.loanToValueRatio * 100 : 0}%</p>
               <p><strong>Collateralization Status:</strong>
