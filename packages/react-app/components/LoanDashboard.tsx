@@ -64,17 +64,17 @@ const LoanDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="flex-grow max-w-4xl mx-auto p-6">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">Loan Dashboard</h2>
 
-        {/* Grid layout to place cards side by side */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Grid layout with increased gap for more whitespace */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8"> {/* Increased gap from 6 to 8 */}
 
           {/* Card 1: Your Loan & Borrow Loan Button */}
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-4">Your Loan</h3>
+          <div className="bg-white p-4 rounded-lg shadow-lg"> {/* Enhanced shadow */}
+            <h3 className="text-2xl font-bold mb-4">Your Loan</h3>
             <div className="space-y-3 text-gray-700 text-sm">
               <p><strong>Loan Amount:</strong> ${loanData?.loanAmount?.toLocaleString()}</p>
               <p><strong>Collateral Amount:</strong> ${loanData?.collateralAmount.toLocaleString()}</p>
@@ -90,7 +90,7 @@ const LoanDashboard: React.FC = () => {
             <div className="mt-4">
               <button
                 onClick={handleBorrowLoan}
-                className="w-50 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"
+                className="w-50  bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
               >
                 Borrow Loan
               </button>
@@ -98,8 +98,8 @@ const LoanDashboard: React.FC = () => {
           </div>
 
           {/* Card 2: Enter Loan Amount & Submit Borrow Loan Button */}
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-4">Enter Loan Amount</h3>
+          <div className="bg-gray-100 p-4 rounded-lg shadow-lg"> {/* Enhanced shadow */}
+            <h3 className="text-2xl font-bold mb-4">Enter Loan Amount</h3>
             <div className="mt-4">
               <label htmlFor="borrowAmount" className="block text-sm font-medium text-gray-700 mb-2">
                 Enter Loan Amount:
@@ -107,7 +107,7 @@ const LoanDashboard: React.FC = () => {
               <input
                 type="number"
                 id="borrowAmount"
-                value={borrowAmount ?? ""}
+                value={ borrowAmount ?? ""}
                 onChange={(e) => setBorrowAmount(e.target.value)}
                 className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400 text-sm"
                 placeholder="Enter loan amount you want to borrow"
@@ -116,7 +116,7 @@ const LoanDashboard: React.FC = () => {
             <div className="mt-4">
               <button
                 onClick={handleBorrowLoan}
-                className="w-50 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"
+                className="w-50  bg-yellow-400  hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
               >
                 Submit Borrow Loan
               </button>
@@ -125,15 +125,15 @@ const LoanDashboard: React.FC = () => {
         </div>
 
         {/* New Card: Loan Repayment */}
-        <div className="mt-6 bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4">Repay Loan</h3>
+        <div className="mt-8 bg-gray-100 p-4 rounded-lg shadow-lg"> {/* Enhanced shadow and increased margin-top */}
+          <h3 className="text-2xl font-bold mb-4">Repay Loan</h3>
           <p className="text-gray-700 text-sm">
             <strong>Loan Taken:</strong> ${loanData?.loanAmount?.toLocaleString()}
           </p>
           <div className="mt-4">
             <button
               onClick={handleRepayLoan}
-              className="w-50  bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-red-300 text-sm"
+              className="w-50  bg-yellow-400  hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-300 text-sm"
             >
               Repay Loan
             </button>
@@ -141,7 +141,7 @@ const LoanDashboard: React.FC = () => {
         </div>
 
         {/* Withdraw Collateral Button below the cards */}
-        <div className="mt-6">
+        <div className="mt-8"> {/* Increased margin-top for separation */}
           <button
             onClick={handleBorrowLoan}
             className="w-50 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm"

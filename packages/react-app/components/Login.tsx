@@ -79,6 +79,7 @@ const Login: React.FC = () => {
           Connect to wallet
         </button> */}
         <div className="mt-4">
+          
         <ConnectButton  />
         </div>
       </div>
