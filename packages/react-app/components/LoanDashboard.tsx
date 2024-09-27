@@ -21,11 +21,15 @@ const LoanDashboard: React.FC = () => {
       try {
         const maxLoanAmount = await getMaxLoanAmount();
         const mxLoanStr = maxLoanAmount.toString();
-        console.log((parseInt(mxLoanStr) / Math.pow(8, mxLoanStr)).toFixed(mxLoanStr));
+        const mxLoanFloat = parseFloat(mxLoanStr);
+        const formattedLoanAmount = (mxLoanFloat / Math.pow(10, 8)).toFixed(4); // Adjust precision as needed
         const uCollat = await getCollateralBalanceinUSD();
+        const uCollatStr = uCollat.toString();
+        const uCollatFloat = parseFloat(uCollatStr);
+        const formattedCollateralAmount = (uCollatFloat / Math.pow(10, 8)).toFixed(4); // Adjust precision as needed
         const updatedLoanData: LoanData = {
-          loanAmount: parseFloat(maxLoanAmount), 
-          collateralAmount: parseFloat(uCollat), 
+          loanAmount: parseFloat(formattedLoanAmount), 
+          collateralAmount: parseFloat(formattedCollateralAmount), 
           loanToValueRatio: 1.5,  
           isSufficientlyCollateralized: true,
         };
@@ -36,6 +40,7 @@ const LoanDashboard: React.FC = () => {
     };
     fetchLoanData();
   }, [getMaxLoanAmount, getCollateralBalanceinUSD]);
+
 
   const [borrowAmount, setBorrowAmount] = useState<string>("");
 
