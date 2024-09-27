@@ -6,7 +6,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./CollateralManager.sol";
-import "./PriceFeedOracles.sol"; 
+// import "./PriceFeedOracles.sol";
+import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
+
 
 
 
@@ -15,12 +17,14 @@ contract LoanManager is ReentrancyGuard, Ownable {
 
     ERC20 public cUSDToken; // Token used to finance the loan
     CollateralManager public collateralManager; // Contract that keeps track of user collateral
-    MellowFiPriceOracle public priceOracle; // Price Oracle contract instance
     uint256 public fundPool; // Total funds available for loans
 
     uint256 public collateralToLoanRatio = 150; // 150% collateral requirement (i.e. 1.5x collateral for loan)
     uint256 public loanDuration = 30 days;
     uint256 public defaultDuration = 10 days;   // Extra time before liquidation after loan is due
+
+    AggregatorV3Interface internal celoPriceFeed;
+    AggregatorV3Interface internal usdtPriceFeed;
 
     struct Loan {
         uint256 amount;
@@ -37,10 +41,23 @@ contract LoanManager is ReentrancyGuard, Ownable {
     event LoanRepaid(address indexed user, uint256 amount, uint256 collateralReturned);
     event LoanDefaulted(address indexed user, uint256 collateralLiquidated);
 
-    constructor(ERC20 _cUSDToken, address _collateralManager, address _priceOracle) Ownable(msg.sender) {
-        cUSDToken = _cUSDToken;
+    constructor(ERC20 _cusdToken,address _collateralManager) Ownable(msg.sender) {
+        cUSDToken = _cusdToken;
         collateralManager = CollateralManager(_collateralManager);
-        priceOracle = MellowFiPriceOracle(_priceOracle); 
+        celoPriceFeed = AggregatorV3Interface(0x022F9dCC73C5Fb43F2b4eF2EF9ad3eDD1D853946);
+        usdtPriceFeed = AggregatorV3Interface(0x7bcB65B53D5a7FfD2119449B8CbC370c9058fd52);
+    }
+
+    // Fetches the latest price of CELO from Chainlink Price Feed
+    function getCeloPrice() public view returns (int) {
+        (, int price,,,) = celoPriceFeed.latestRoundData();
+        return price; // CELO price in USD, with 8 decimals
+    }
+
+    // Fetches the latest price of USDT from Chainlink Price Feed
+    function getUsdtPrice() public view returns (int) {
+        (, int price,,,) = usdtPriceFeed.latestRoundData();
+        return price; // USDT price in USD, with 8 decimals
     }
 
     // Request a loan based on the user's collateral
@@ -48,35 +65,40 @@ contract LoanManager is ReentrancyGuard, Ownable {
         require(_loanAmount > 0, "LoanManager: Loan amount must be greater than 0");
         require(userLoans[msg.sender].amount == 0, "LoanManager: Existing loan must be repaid first");
 
+
         // Ensure user has enough collateral
-        uint256 userTotalCol = collateralManager.getCollateralBalanceinUSD(msg.sender);
-        require(userTotalCol > 0, "LoanManager: No collateral available");
-
-        // Calculate maximum loan amount based on collateral-to-loan ratio
-        uint256 maxLoanAmount = userTotalCol * 100 / collateralToLoanRatio;
-        require(_loanAmount <= maxLoanAmount, "LoanManager: Insufficient collateral for requested loan amount");
-
+        (uint256 userColCelo, uint256 userColStable) = collateralManager.getCollateralBalance(msg.sender);
+        uint256 celoPriceInUSD = uint256(getCeloPrice());
+        uint256 usdtPriceInUSD = uint256(getUsdtPrice());
+        uint256 celoCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18;
+        uint256 stableCollateralInUSD = (userColStable * usdtPriceInUSD) / 1e18;
+        uint256 userTotalColinUSD = celoCollateralInUSD + stableCollateralInUSD;
+        require(userTotalColinUSD >= _loanAmount, "LoanManager: Insufficient collateral");
+        
         // Store loan information
         Loan memory newLoan = Loan({
             amount: _loanAmount,
             interestRate: 5, // hardcoded interest for now
             startTime: block.timestamp,
-            collateral: userTotalCol,
+            collateral: userTotalColinUSD,
             isRepaid: false,
             isDefaulted: false
         });
         userLoans[msg.sender] = newLoan;
-==
+
         // Transfer cUSD to user
         require(cUSDToken.transfer(msg.sender, _loanAmount), "LoanManager: Loan transfer failed");
 
-        emit LoanIssued(msg.sender, _loanAmount, userTotalCol);
+        emit LoanIssued(msg.sender, _loanAmount, userTotalColinUSD);
     }
 
     // Get possible loan amount based on collateral
     function getMaxLoanAmount() external view returns (uint256) {
-        uint256 userTotalCol = collateralManager.getCollateralBalanceinUSD(msg.sender);
-        return userTotalCol * 100 / collateralToLoanRatio;
+        (uint256 userColCelo, uint256 userColStable ) = collateralManager.getCollateralBalance(msg.sender);
+        uint256 celoPriceInUSD = uint256(getCeloPrice());
+        uint256 usdtPriceInUSD = uint256(getUsdtPrice());
+        uint256 totalCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18 + (userColStable * usdtPriceInUSD) / (1e18);
+        return totalCollateralInUSD;
     }
 
     // Repay the loan and recover collateral
@@ -116,6 +138,19 @@ contract LoanManager is ReentrancyGuard, Ownable {
         emit LoanDefaulted(_user, loan.collateral);
     }
 
+    // Liquidate collateral if a loan has defaulted
+    function liquidateCollateral(address _user) external nonReentrant {
+        Loan storage loan = userLoans[_user];
+        require(loan.amount > 0, "LoanManager: No active loan");
+        require(loan.isDefaulted, "LoanManager: Loan not defaulted");
+
+        // Transfer collateral to the contract
+        collateralManager.liquidateCollateral(_user);
+
+        // Reset loan status
+        delete userLoans[_user];
+    }
+
     // Admin functions to update collateralToLoanRatio or loanDuration if needed
     function updateCollateralToLoanRatio(uint256 _newRatio) external {
         require(_newRatio >= 100, "LoanManager: Invalid ratio");
@@ -135,6 +170,19 @@ contract LoanManager is ReentrancyGuard, Ownable {
     function addFundToPool(uint256 _amount) external onlyOwner {
         require(cUSDToken.transferFrom(msg.sender, address(this), _amount), "LoanManager: Fund transfer failed");
         fundPool += _amount;
+    }
+
+    function getLoanBalancewithInterest(address _user) external view returns (uint256) {
+        Loan memory loan = userLoans[_user];
+        return loan.amount + (loan.amount * loan.interestRate / 100);
+    }
+
+    function getCollateralBalanceinUSD(address _user) external view returns (uint256) {
+        (uint256 userColCelo, uint256 userColStable) = collateralManager.getCollateralBalance(_user);
+        uint256 celoPriceInUSD = uint256(getCeloPrice());
+        uint256 usdtPriceInUSD = uint256(getUsdtPrice());
+        uint256 totalCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18 + (userColStable * usdtPriceInUSD) / 1e18;
+        return totalCollateralInUSD;
     }
 
     
