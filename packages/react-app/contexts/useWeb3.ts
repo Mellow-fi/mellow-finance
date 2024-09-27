@@ -8,9 +8,9 @@ import { Address } from "viem";
 
 export const useWeb3 = () => {
   const { address } = useAccount();
-  const COLLATERAL_MANAGER_CONTRACT = "0xf3978E55d052124178dBd34729dab91cD39dc23D";
+  const COLLATERAL_MANAGER_CONTRACT = "0x67986d4bca78DdCCE9Eb77C5c6171b38c89e915b";
   const cUER_CONTRACT_ADDRESS = "0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f";
-  const LOAN_MANAGER_CONTRACT = "0x20dc701Ef6265C7Fb6a81680aB662205Ce5d10D8";
+  const LOAN_MANAGER_CONTRACT = "0x0262F2B6A629a2C84FcF5cCe1F9b9B5a63b9A134";
   const cKES_MOCK_TOCKEN = "0x874069fa1eb16d44d622f2e0ca25eea172369bc1";
 
   
@@ -67,7 +67,7 @@ export const useWeb3 = () => {
   };
 
   const getCollateralBalanceinUSD = async () => {
-    const userColl =  await executeReadOnly({ contractAddress: COLLATERAL_MANAGER_CONTRACT, abi: CollateralManagerABI.abi, method: "getCollateralBalanceinUSD", args: [address] });
+    const userColl =  await executeReadOnly({ contractAddress: LOAN_MANAGER_CONTRACT, abi: LoanManagerABI.abi, method: "getCollateralBalanceinUSD", args: [address] });
     return userColl;
   };
 
