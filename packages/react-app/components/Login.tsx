@@ -6,6 +6,8 @@ import { sendSignInLinkToEmail } from "firebase/auth";
 import { Router } from "react-router-dom";
 import { useRouter } from "next/router";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Navbar from "./NavBar";
+import Footer from "./Footer";
 // import image from "../static/login-image.png";
 
 const Login: React.FC = () => {
@@ -39,6 +41,8 @@ const Login: React.FC = () => {
   };
 
   return (
+    <div>
+    <Navbar/>
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center">
       <div className="text-3xl font-semibold mb-4 text-gray-800 flex items-center">
         <h1>Mellow  M<span className="text-yellow-400 mx-1 text-6xl">o</span>ney Magic!</h1>
@@ -80,6 +84,8 @@ const Login: React.FC = () => {
       </div>
 
       {message && <p className="mt-4 text-green-600">{message}</p>}
+    </div>
+    <Footer />
     </div>
   );
 };
