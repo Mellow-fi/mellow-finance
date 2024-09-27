@@ -20,6 +20,8 @@ const LoanDashboard: React.FC = () => {
     const fetchLoanData = async () => {
       try {
         const maxLoanAmount = await getMaxLoanAmount();
+        const mxLoanStr = maxLoanAmount.toString();
+        console.log((parseInt(mxLoanStr) / Math.pow(8, mxLoanStr)).toFixed(mxLoanStr));
         const uCollat = await getCollateralBalanceinUSD();
         const updatedLoanData: LoanData = {
           loanAmount: parseFloat(maxLoanAmount), 
