@@ -81,6 +81,10 @@ export const useWeb3 = () => {
     return await executeTransaction({ contractAddress: LOAN_MANAGER_CONTRACT, abi: LoanManagerABI.abi, method: "repayLoan", args: [amountInWei] });
   }
 
+  const releaseFunds = async () => {
+    return await executeTransaction({ contractAddress: COLLATERAL_MANAGER_CONTRACT, abi: CollateralManagerABI.abi, method: "releaseFunds", args: [] });
+  }
+
   const signTransaction = async () => {
     const signer = await getSigner();
     const res = await signer.signMessage(`Hello from Celo Composer Valora Template!`);
@@ -95,6 +99,8 @@ export const useWeb3 = () => {
     depositUsdtCollateral,
     getMaxLoanAmount,
     getCollateralBalanceinUSD,
-    requestLoan
+    requestLoan,
+    repayLoan,
+    releaseFunds,
   };
 };
