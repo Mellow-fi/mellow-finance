@@ -70,15 +70,17 @@ contract LoanManager is ReentrancyGuard, Ownable {
         (uint256 userColCelo, uint256 userColStable) = collateralManager.getCollateralBalance(msg.sender);
         uint256 celoPriceInUSD = uint256(getCeloPrice());
         uint256 usdtPriceInUSD = uint256(getUsdtPrice());
-        uint256 userTotalCol = (userColCelo * celoPriceInUSD) / 1e10 + (userColStable * usdtPriceInUSD) / 1e10;
-        require(userTotalCol >= _loanAmount, "LoanManager: Insufficient collateral");
+        uint256 celoCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18;
+        uint256 stableCollateralInUSD = (userColStable * usdtPriceInUSD) / 1e18;
+        uint256 userTotalColinUSD = celoCollateralInUSD + stableCollateralInUSD;
+        require(userTotalColinUSD >= _loanAmount, "LoanManager: Insufficient collateral");
         
         // Store loan information
         Loan memory newLoan = Loan({
             amount: _loanAmount,
             interestRate: 5, // hardcoded interest for now
             startTime: block.timestamp,
-            collateral: userTotalCol,
+            collateral: userTotalColinUSD,
             isRepaid: false,
             isDefaulted: false
         });
@@ -87,7 +89,7 @@ contract LoanManager is ReentrancyGuard, Ownable {
         // Transfer cUSD to user
         require(cUSDToken.transfer(msg.sender, _loanAmount), "LoanManager: Loan transfer failed");
 
-        emit LoanIssued(msg.sender, _loanAmount, userTotalCol);
+        emit LoanIssued(msg.sender, _loanAmount, userTotalColinUSD);
     }
 
     // Get possible loan amount based on collateral
