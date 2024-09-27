@@ -66,7 +66,7 @@ contract LoanManager is ReentrancyGuard, Ownable {
             isDefaulted: false
         });
         userLoans[msg.sender] = newLoan;
-
+==
         // Transfer cUSD to user
         require(cUSDToken.transfer(msg.sender, _loanAmount), "LoanManager: Loan transfer failed");
 
