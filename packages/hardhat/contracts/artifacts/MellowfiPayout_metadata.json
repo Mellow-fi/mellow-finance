@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.26+commit.8a97fa7a"
+		"version": "0.8.20+commit.a1b79de6"
 	},
 	"language": "Solidity",
 	"output": {
@@ -424,7 +424,7 @@
 		"compilationTarget": {
 			"contracts/MellowFiPToken.sol": "MellowfiPayout"
 		},
-		"evmVersion": "cancun",
+		"evmVersion": "shanghai",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -477,11 +477,11 @@
 			]
 		},
 		"contracts/MellowFiPToken.sol": {
-			"keccak256": "0xc7db3b66288e7f0ab7f104f419ce3d61b9f3bb0f80cd285e47263578a1e12269",
+			"keccak256": "0xc5983db1da308bf8adb05bf12672e5094041a1b2d84fb5a2cff5ad659e9a8b31",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://974a15b856e23b9f2e56ee25ae954028ac70e4314e56086812fd88e4de4a7b7a",
-				"dweb:/ipfs/QmeHcpeSHww9TXKjKnA5C13BXxMLkzJQZ5dXXqsBKeqqaq"
+				"bzz-raw://afb29a0d9d2e935cb6030731cb60f73e67df4cbb9187e0a1a56fd124776c61c4",
+				"dweb:/ipfs/QmaLn1jRqBAMJ3ni8g9Xp6Lb7Q1za3XPToaDsCPRPjdGRt"
 			]
 		}
 	},
