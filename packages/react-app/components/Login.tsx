@@ -60,15 +60,13 @@ const Login: React.FC = () => {
 
         <div>
           <button
-            onClick={handleLoginWithoutEmail}
+            onClick={handleLogin}
             className="mt-4 px-7 py-2 bg-yellow-400 text-black rounded-full shadow-lg hover:bg-yellow-500 transition duration-300"
           >
             Login here
           </button>
 
-          <div className="mt-4">
-            <ConnectButton />
-          </div>
+          
         </div>
 
         {message && <p className="mt-4 text-green-600">{message}</p>}
