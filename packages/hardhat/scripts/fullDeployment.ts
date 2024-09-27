@@ -17,14 +17,14 @@ async function main() {
     console.log(`Oracles deployed to: ${oracle.target}`);
 
     // Deploy MockCollateral Token
-    const MockCollateral = await hre.ethers.getContractFactory("mellowfiCollatal");
-    const mockCollateral = await MockCollateral.deploy();
-    await mockCollateral.waitForDeployment();
-    logContractDeployed("mellowfiCollateral Token", mockCollateral);
+    // const MockCollateral = await hre.ethers.getContractFactory("mellowfiCollatal");
+    // const mockCollateral = await MockCollateral.deploy();
+    // await mockCollateral.waitForDeployment();
+    // logContractDeployed("mellowfiCollateral Token", mockCollateral);
 
     // Deploy Collateral Manager
     const Coll = await hre.ethers.getContractFactory("CollateralManager");
-    const coll = await Coll.deploy(mockCollateral.target, oracle.target, {});
+    const coll = await Coll.deploy("0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f", oracle.target, {});
     await coll.waitForDeployment();
     logContractDeployed("CollateralManager", coll);
 
