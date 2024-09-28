@@ -81,6 +81,10 @@ export const useWeb3 = () => {
     return await executeTransaction({ contractAddress: LOAN_MANAGER_CONTRACT, abi: LoanManagerABI.abi, method: "repayLoan", args: [amountInWei] });
   }
 
+  const getLoanBalancewithInterest = async () => {
+    return await executeReadOnly({ contractAddress: LOAN_MANAGER_CONTRACT, abi: LoanManagerABI.abi, method: "getLoanBalancewithInterest", args: [address] });
+  }
+
   const releaseFunds = async () => {
     return await executeTransaction({ contractAddress: COLLATERAL_MANAGER_CONTRACT, abi: CollateralManagerABI.abi, method: "releaseFunds", args: [] });
   }
@@ -102,5 +106,6 @@ export const useWeb3 = () => {
     requestLoan,
     repayLoan,
     releaseFunds,
+    getLoanBalancewithInterest,
   };
 };

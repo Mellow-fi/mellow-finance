@@ -13,7 +13,7 @@ interface LoanData {
 
 const LoanDashboard: React.FC = () => {
   const [loanData, setLoanData] = useState<LoanData | null>(null);
-  const { getMaxLoanAmount, getCollateralBalanceinUSD, requestLoan, repayLoan } = useWeb3();
+  const { getMaxLoanAmount, getCollateralBalanceinUSD, requestLoan, repayLoan, getLoanBalancewithInterest } = useWeb3();
   const router = useRouter(); 
 
   useEffect(() => {
@@ -42,7 +42,18 @@ const LoanDashboard: React.FC = () => {
   }, [getMaxLoanAmount, getCollateralBalanceinUSD]);
 
 
+
   const [borrowAmount, setBorrowAmount] = useState<string>("");
+
+  const getLoanBalance = async () => {
+    try {
+      const loanBalance = await getLoanBalancewithInterest();
+      return loanBalance;
+    } catch (error) {
+      console.error("Error fetching loan balance:", error);
+    }
+  }
+    
 
   const handleBorrowLoan = async () => {
     try {
@@ -162,7 +173,7 @@ const LoanDashboard: React.FC = () => {
         <div className="mt-8 bg-gray-100 p-4 rounded-lg shadow-lg">
           <h3 className="text-2xl font-bold mb-4">Repay Loan</h3>
           <p className="text-gray-700 text-sm">
-            <strong>Loan Taken:</strong> ${loanData?.loanAmount?.toLocaleString()}
+            <strong>Loan Taken:</strong> ${getLoanBalance()}
           </p>
           <div className="mt-4">
             <button
