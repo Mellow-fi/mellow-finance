@@ -48,11 +48,11 @@ const LoanDashboard: React.FC = () => {
     try {
       if (loanData) {
         const loanAmountStr = loanData.loanAmount.toString();
-        const loanAmountFloat = parseFloat(loanAmountStr);
-        const loanAmountInWei = (loanAmountFloat * Math.pow(10, 18));
-        const reducedLoanAmountInWei = (loanAmountInWei * 1.5).toString();
+        const loanAmountFloat = parseInt(loanAmountStr);
+        const loanAmountInWei = (loanAmountFloat);
+        const reducedLoanAmountInWei = (loanAmountInWei).toString();
         console.log(loanAmountInWei);
-        // await requestLoan(reducedLoanAmountInWei);
+        await requestLoan(reducedLoanAmountInWei);
         
         alert("Loan request successful!");
       } else {
@@ -67,7 +67,7 @@ const LoanDashboard: React.FC = () => {
   const handleLoanwithValue = async () => {
     try{
       if (borrowAmount) {
-        const loanAmountInWei = (parseFloat(borrowAmount) * Math.pow(10, 18)).toString();
+        const loanAmountInWei = (parseFloat(borrowAmount)).toString();
         console.log(loanAmountInWei);
         await requestLoan(loanAmountInWei);
         alert("Loan request successful!");
