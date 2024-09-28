@@ -119,6 +119,7 @@ contract LoanManager is ReentrancyGuard, Ownable {
 
         // Return collateral to the user
         collateralManager.releaseFunds(msg.sender);
+        userLoans[msg.sender].amount = 0;
         emit LoanRepaid(msg.sender, loan.amount, loan.collateral);
     }
 
