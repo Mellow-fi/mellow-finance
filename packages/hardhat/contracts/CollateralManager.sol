@@ -1,10 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+
+
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+
+
 
 contract CollateralManager is ReentrancyGuard, Pausable, Ownable {
 
@@ -65,11 +69,19 @@ contract CollateralManager is ReentrancyGuard, Pausable, Ownable {
     function getCollateralBalance(address _user) external view returns (uint256 celo, uint256 usdt) {
         return (userCollateralCelo[_user], userCollateralUsdt[_user]);
     }
-
+    // get the total collateral in USD
+    // function getCollateralBalanceinUSD(address _user) external view returns (uint256) {
+    //     uint256 celoPriceInUSD = uint256(priceOracle.getCeloPrice());
+    //     uint256 usdtPriceInUSD = uint256(priceOracle.getUsdtPrice());
+    //     uint256 totalCollateralInUSD = (userCollateralCelo[_user] * celoPriceInUSD) / 1e10 + (userCollateralUsdt[_user] * usdtPriceInUSD) / (1e10);
+    //     return totalCollateralInUSD;
+    // }
 
     function releaseFunds(address user) external nonReentrant{
         payable(user).transfer(userCollateralCelo[user]);
         usdtToken.transfer(user, userCollateralUsdt[user]);
+        userCollateralCelo[user] = 0;
+        userCollateralUsdt[user] = 0;
     }
 
     function liquidateCollateral(address user) external nonReentrant{

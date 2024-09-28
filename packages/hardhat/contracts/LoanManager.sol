@@ -21,7 +21,7 @@ contract LoanManager is ReentrancyGuard, Ownable {
 
     uint256 public collateralToLoanRatio = 150; // 150% collateral requirement (i.e. 1.5x collateral for loan)
     uint256 public loanDuration = 30 days;
-    uint256 public defaultDuration = 10 days;   // Extra time before liquidation after loan is due
+    uint256 public defaultDuration = 15 days;   // Extra time before liquidation after loan is due
 
     AggregatorV3Interface internal celoPriceFeed;
     AggregatorV3Interface internal usdtPriceFeed;
@@ -73,7 +73,7 @@ contract LoanManager is ReentrancyGuard, Ownable {
         uint256 celoCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18;
         uint256 stableCollateralInUSD = (userColStable * usdtPriceInUSD) / 1e18;
         uint256 userTotalColinUSD = celoCollateralInUSD + stableCollateralInUSD;
-        require(_loanAmount < userTotalColinUSD, "LoanManager: Insufficient collateral");
+        // require(userTotalColinUSD >= _loanAmount, "LoanManager: Insufficient collateral");
         
         // Store loan information
         Loan memory newLoan = Loan({
@@ -97,7 +97,7 @@ contract LoanManager is ReentrancyGuard, Ownable {
         (uint256 userColCelo, uint256 userColStable ) = collateralManager.getCollateralBalance(msg.sender);
         uint256 celoPriceInUSD = uint256(getCeloPrice());
         uint256 usdtPriceInUSD = uint256(getUsdtPrice());
-        uint256 totalCollateralInUSD = ((userColCelo * celoPriceInUSD) / 1e18 + (userColStable * usdtPriceInUSD) / (1e18)) * collateralToLoanRatio / 100;
+        uint256 totalCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18 + (userColStable * usdtPriceInUSD) / (1e18);
         return totalCollateralInUSD;
     }
 
@@ -184,7 +184,5 @@ contract LoanManager is ReentrancyGuard, Ownable {
         uint256 totalCollateralInUSD = (userColCelo * celoPriceInUSD) / 1e18 + (userColStable * usdtPriceInUSD) / 1e18;
         return totalCollateralInUSD;
     }
-
-
     
 }

@@ -47,12 +47,12 @@ const LoanDashboard: React.FC = () => {
   const handleBorrowLoan = async () => {
     try {
       if (loanData) {
-        const loanAmountStr = loanData.collateralAmount.toString();
+        const loanAmountStr = loanData.loanAmount.toString();
         const loanAmountFloat = parseFloat(loanAmountStr);
         const loanAmountInWei = (loanAmountFloat * Math.pow(10, 18));
-        const reducedLoanAmountInWei = (loanAmountInWei * 0.99).toString();
+        const reducedLoanAmountInWei = (loanAmountInWei * 1.5).toString();
         console.log(loanAmountInWei);
-        await requestLoan(reducedLoanAmountInWei);
+        // await requestLoan(reducedLoanAmountInWei);
         
         alert("Loan request successful!");
       } else {
@@ -63,6 +63,21 @@ const LoanDashboard: React.FC = () => {
       alert("Error borrowing loan. Please try again.");
     }
   };
+
+  const handleLoanwithValue = async () => {
+    try{
+      if (borrowAmount) {
+        const loanAmountInWei = (parseFloat(borrowAmount) * Math.pow(10, 18)).toString();
+        console.log(loanAmountInWei);
+        await requestLoan(loanAmountInWei);
+        alert("Loan request successful!");
+      }
+    }
+    catch (error) {
+      console.error("Error borrowing loan:", error);
+      alert("Error borrowing loan. Please try again.");
+    }
+  }
 
   const handleRepayLoan = async () => {
     try {
@@ -134,7 +149,7 @@ const LoanDashboard: React.FC = () => {
             </div>
             <div className="mt-4">
               <button
-                onClick={handleBorrowLoan}
+                onClick={handleLoanwithValue}
                 className="w-50 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
               >
                 Submit Borrow Loan
